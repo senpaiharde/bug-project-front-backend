@@ -1,0 +1,17 @@
+[
+    {
+      "_id": "b101",
+      "title": "Bug in login flow",
+      "severity": 3,
+      "description": "Login form doesn't validate properly",
+      "createdAt": 1712500000000
+    },
+    {
+      "_id": "b102",
+      "title": "Broken dark mode",
+      "severity": 2,
+      "description": "Dark mode flickers on reload",
+      "createdAt": 1712600000000
+    }
+  ]
+  
