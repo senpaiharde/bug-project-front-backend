@@ -1,0 +1,14 @@
+.bug-details h3 {
+    color: var(--clr1);
+    font-size: 2em;
+}
+
+.bug-details h4 {
+    color: var(--clr2);
+}
+
+.bug-details img {
+    max-width: 200px;
+    display: block;
+    margin: auto;
+}
