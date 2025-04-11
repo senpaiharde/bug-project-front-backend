@@ -1,4 +1,4 @@
-import { bugService } from '../services/bug.service.js'
+import {  deleteBug, getBugs, saveBug } from '../services/bug.service.js'
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 import { BugList } from '../cmps/BugList.jsx'
 import { useState } from 'react'
@@ -13,13 +13,13 @@ export function BugIndex() {
     }, [])
 
     async function loadBugs() {
-        const bugs = await bugService.query()
+        const bugs = await getBugs()
         setBugs(bugs)
     }
 
     async function onRemoveBug(bugId) {
         try {
-            await bugService.remove(bugId)
+            await deleteBug(bugId)
             console.log('Deleted Succesfully!')
             setBugs(prevBugs => prevBugs.filter((bug) => bug._id !== bugId))
             showSuccessMsg('Bug removed')
@@ -35,7 +35,7 @@ export function BugIndex() {
             severity: +prompt('Bug severity?'),
         }
         try {
-            const savedBug = await bugService.save(bug)
+            const savedBug = await saveBug(bug)
             console.log('Added Bug', savedBug)
             setBugs(prevBugs => [...prevBugs, savedBug])
             showSuccessMsg('Bug added')
@@ -50,7 +50,7 @@ export function BugIndex() {
         const bugToSave = { ...bug, severity }
         try {
 
-            const savedBug = await bugService.save(bugToSave)
+            const savedBug = await saveBug(bugToSave)
             console.log('Updated Bug:', savedBug)
             setBugs(prevBugs => prevBugs.map((currBug) =>
                 currBug._id === savedBug._id ? savedBug : currBug

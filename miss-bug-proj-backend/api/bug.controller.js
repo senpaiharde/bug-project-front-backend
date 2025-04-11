@@ -32,7 +32,7 @@ export async function saveBug(res,req) {
     }
 }
 
-export async function deleteBug(params) {
+export async function deleteBug(res,req) {
     try{
         await remove(req.params.id);
         res.send({msg:'bug removed'});

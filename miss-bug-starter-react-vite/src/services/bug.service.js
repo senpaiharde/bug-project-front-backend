@@ -1,30 +1,32 @@
+import axios from "axios";
 
-import { storageService } from './async-storage.service.js'
-import { utilService } from './util.service.js'
 
-const STORAGE_KEY = 'bugDB'
+const axoisInstance = axios.create({
+    baseURL: 'http://localhost:3030/api/bug',
+    withCredentials: true
+})
 
-export const bugService = {
-    query,
-    getById,
-    save,
-    remove,
+
+export async function getBugs() {
+    const res = await axoisInstance.get('/')
+    return res.data
 }
 
+export async function getBugsById(id) {
+    const res = await axoisInstance.get(`/${id}`)
+    return res.data
+}
 
-function query() {
-    return storageService.query(STORAGE_KEY)
-}
-function getById(bugId) {
-    return storageService.get(STORAGE_KEY, bugId)
-}
-function remove(bugId) {
-    return storageService.remove(STORAGE_KEY, bugId)
-}
-function save(bug) {
-    if (bug._id) {
-        return storageService.put(STORAGE_KEY, bug)
-    } else {
-        return storageService.post(STORAGE_KEY, bug)
+export async function saveBug(bug) {
+    if(bug._id){
+        const res = axoisInstance.put('/',bug)
+        return res.data
+    }else {
+        const res = axoisInstance.post('/',bug)
+        return res.data
     }
+}
+
+export async function deleteBug(id) {
+    await axoisInstance.delete(`/${id}`)
 }
