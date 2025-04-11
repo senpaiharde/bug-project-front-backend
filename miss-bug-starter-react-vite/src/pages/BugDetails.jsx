@@ -1,6 +1,6 @@
 
 import { useState } from 'react'
-import {  getBugsById } from '../services/bug.service.js'
+import {  getBugs, getBugsById } from '../services/bug.service.js'
 import { showErrorMsg } from '../services/event-bus.service.js'
 import { useParams } from 'react-router'
 import { useEffect } from 'react'
@@ -18,7 +18,7 @@ export function BugDetails() {
 
     async function loadBug() {
         try {
-            const bug = await getBugsById(bugId)
+            const bug = await getBugs(bugId)
             setBug(bug)
         } catch (err) {
             showErrorMsg('Cannot load bug')

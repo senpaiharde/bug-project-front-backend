@@ -1,17 +1,21 @@
 [
-    {
-      "_id": "b101",
-      "title": "Bug in login flow",
-      "severity": 3,
-      "description": "Login form doesn't validate properly",
-      "createdAt": 1712500000000
-    },
-    {
-      "_id": "b102",
-      "title": "Broken dark mode",
-      "severity": 2,
-      "description": "Dark mode flickers on reload",
-      "createdAt": 1712600000000
-    }
-  ]
-  
+  {
+    "_id": "b102",
+    "title": "Broken dark mode",
+    "severity": 2,
+    "description": "Dark mode flickers on reload",
+    "createdAt": 1712600000000
+  },
+  {
+    "title": null,
+    "severity": 0,
+    "_id": "56477782-c5f8-4a19-b940-5be382e8881e",
+    "createdAt": 1744369628233
+  },
+  {
+    "title": "2323",
+    "severity": 2323232323,
+    "_id": "1849afe0-e62d-44cc-aeef-e1fad3fb305e",
+    "createdAt": 1744369634694
+  }
+]

@@ -2,7 +2,11 @@
 import { Link } from 'react-router-dom'
 import { BugPreview } from './BugPreview'
 
-export function BugList({ bugs, onRemoveBug, onEditBug }) {
+export function BugList({ bugs =[] , onRemoveBug, onEditBug }) {
+    if(!Array.isArray(bugs)) {
+        console.error('BugList expected array but got:', bugs)
+        return <p>bugs not available</p>
+    }
     return (
         <ul className="bug-list">
             {bugs.map((bug) => (

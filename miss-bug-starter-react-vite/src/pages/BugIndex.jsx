@@ -13,9 +13,16 @@ export function BugIndex() {
     }, [])
 
     async function loadBugs() {
-        const bugs = await getBugs()
-        setBugs(bugs)
+        try {
+            const bugs = await getBugs()
+            console.log(' Loaded bugs:', bugs)
+            setBugs(bugs)
+        } catch (err) {
+            console.error(' Failed to load bugs:', err)
+            showErrorMsg('Failed to load bugs from server')
+        }
     }
+    
 
     async function onRemoveBug(bugId) {
         try {
@@ -34,6 +41,7 @@ export function BugIndex() {
             title: prompt('Bug title?'),
             severity: +prompt('Bug severity?'),
         }
+        console.log(' Sending bug:', bug)
         try {
             const savedBug = await saveBug(bug)
             console.log('Added Bug', savedBug)

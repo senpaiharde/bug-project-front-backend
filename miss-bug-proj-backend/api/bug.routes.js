@@ -8,9 +8,10 @@ const router = express.Router();
 router.get('/', getBugs);
 
 // Get one bug by setted id
-router.get('/:id', getBugs);
 
-router.post('/', getBugsById);
+
+router.get('/:id', getBugsById);
+router.post('/', saveBug)
 router.put('/', saveBug);
 
 router.delete('/:id',deleteBug);

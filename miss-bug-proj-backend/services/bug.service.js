@@ -18,11 +18,12 @@ async function _loadBugs() {
         const data = await fs.readFile(bugDbPath, 'utf-8')
         bugs = JSON.parse(data);
     }
+    return bugs
 }
 // get all bugs
 export async function query() {          
-    const bugs = await _loadBugs();
-    return bugs
+    return await _loadBugs();
+    
 }
  
 
@@ -46,22 +47,22 @@ export async function remove(bugId) {
 }
 
 export async function save(bug) {
-    bugs = await _loadBugs();
+    const bugs = await _loadBugs()
 
-    if(bug._id) {
-        const idx = bugs.findIndex(b => b._id === idx._id)
-
-        if(inx === -1) throw new Error("bug not found");
-        bug(inx) = bug
-        
-    }else{
-        bug._id = uuid();
-        bug.createdAt = Date.now();
-        bug.push(bug);
+    if (bug._id) {
+        const idx = bugs.findIndex(b => b._id === bug._id)
+        if (idx === -1) throw new Error("Bug not found")
+        bugs[idx] = bug
+    } else {
+        bug._id = uuid()
+        bug.createdAt = Date.now()
+        bugs.push(bug)
     }
-    await _saveBugs();
-    return bug;
+
+    await _saveBugs()
+    return bug
 }
+
 
 async function _saveBugs() {
     await fs.writeFile(bugDbPath , JSON.stringify(bugs, null , 2))

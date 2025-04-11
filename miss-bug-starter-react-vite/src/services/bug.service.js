@@ -1,32 +1,47 @@
 import axios from "axios";
 
 
-const axoisInstance = axios.create({
+const axiosInstance = axios.create({
     baseURL: 'http://localhost:3030/api/bug',
     withCredentials: true
 })
 
 
 export async function getBugs() {
-    const res = await axoisInstance.get('/')
-    return res.data
+    try {
+        const res = await axios.get('http://localhost:3030/api/bug')
+        console.log('🛰️ API response from /api/bug:', res.data)
+        return res.data
+    } catch (err) {
+        console.error('❌ Failed to fetch bugs:', err)
+        return []
+    }
 }
 
+
+
 export async function getBugsById(id) {
-    const res = await axoisInstance.get(`/${id}`)
+    const res = await axiosInstance.get(`/${id}`)
     return res.data
 }
 
 export async function saveBug(bug) {
-    if(bug._id){
-        const res = axoisInstance.put('/',bug)
+    try {
+        console.log('📤 Sending bug to backend:', bug) 
+        let res
+        if (bug._id) {
+            res = await axiosInstance.put('/', bug)
+        } else {
+            res = await axiosInstance.post('/', bug)
+        }
         return res.data
-    }else {
-        const res = axoisInstance.post('/',bug)
-        return res.data
+    } catch (err) {
+        console.error('❌ Error saving bug:', err)
+        throw err
     }
 }
 
+
 export async function deleteBug(id) {
-    await axoisInstance.delete(`/${id}`)
+    await axiosInstance.delete(`/${id}`)
 }

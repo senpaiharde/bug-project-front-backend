@@ -1,6 +1,6 @@
-import { remove,query,getById,save } from "../services/bug.service";
+import { remove,query,getById,save } from "../services/bug.service.js";
 
-export async function getBugs(req,res) {
+export async function getBugs(req, res) {
     try {
         const bugs = await query();
         res.send(bugs);
@@ -11,9 +11,9 @@ export async function getBugs(req,res) {
     
 }
 
-export async function getBugsById(req,res) {
+export async function getBugsById(req, res) {
     try {
-        const bug = getById(req.parmas.id);
+        const bug = await getById(req.params.id);
         if(!bug) return res.status(404).send({err: 'bug nott found'});
         res.send(bug);
     }catch(err){
@@ -22,8 +22,9 @@ export async function getBugsById(req,res) {
     }
 }
 
-export async function saveBug(res,req) {
+export async function saveBug(req, res) {
     try {
+        console.log(' Received bug from frontend:', req.body)
         const savebug = await save(req.body);
         res.send(savebug);
     }catch(err){
@@ -32,7 +33,7 @@ export async function saveBug(res,req) {
     }
 }
 
-export async function deleteBug(res,req) {
+export async function deleteBug(req, res) {
     try{
         await remove(req.params.id);
         res.send({msg:'bug removed'});

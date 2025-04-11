@@ -13,7 +13,8 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "miss-bug-proj-backend": "file:"
+    "miss-bug-proj-backend": "file:",
+    "uuid": "^11.1.0"
   },
   "type": "module"
 }

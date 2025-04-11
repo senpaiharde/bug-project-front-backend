@@ -1,7 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import bugRoutes from './api/bug.routes'
+import bugRoutes from './api/bug.routes.js';
 
 const app = express()
 
@@ -13,7 +13,7 @@ app.use(cors({
     credentials: true
 }));
 
-app.use('app/bug', bugRoutes)
+app.use('/api/bug', bugRoutes)
 
 app.get('/',(req,res) => {
     res.send('hello there');
