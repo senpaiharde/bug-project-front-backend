@@ -7,6 +7,17 @@ import { useEffect } from 'react'
 
 export function BugIndex() {
     const [bugs, setBugs] = useState([])
+    const [filterBy,setFilterBy] = useState({
+        txt:'', severity: '',
+    })
+
+
+    const filterBugs = bugs.filter(bug => {
+        const title = bug.title || ''
+        const matchesTxt = title.toLowerCase().includes(filterBy.txt.toLowerCase())
+        const matchesSeverity = filterBy.severity ? bug.severity >= + filterBy.severity : true
+        return matchesTxt && matchesSeverity
+    })
 
     useEffect(() => {
         loadBugs()
@@ -38,8 +49,9 @@ export function BugIndex() {
 
     async function onAddBug() {
         const bug = {
-            title: prompt('Bug title?'),
-            severity: +prompt('Bug severity?'),
+            title: prompt('Bug title?') || 'Untitled Bug',
+            severity: +prompt('Bug severity?') || 1,
+            description: prompt('Bug description?') || 'No description'
         }
         console.log(' Sending bug:', bug)
         try {
@@ -73,9 +85,24 @@ export function BugIndex() {
     return (
         <section >
             <h3>Bugs App</h3>
+            
             <main>
-                <button onClick={onAddBug}>Add Bug ⛐</button>
-                <BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
+            <section>
+                <input
+                type='text'
+                placeholder='Search By title'
+                value={filterBy.txt}
+                onChange={(ev) => setFilterBy({...filterBy, txt: ev.target.value})}
+                />
+                <input
+                type='number'
+                placeholder='min siverity'
+                value={filterBy.severity}
+                onChange={(ev) => setFilterBy({...filterBy, severity: ev.target.value})}
+                />
+            </section>
+                <button onClick={onAddBug}>Add Bug </button>
+                <BugList bugs={filterBugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
             </main>
         </section>
     )
