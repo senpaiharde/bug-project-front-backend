@@ -1,5 +1,5 @@
 import { remove,query,getById,save } from "../services/bug.service.js";
-
+import PDFDocument from 'pdfkit'
 export async function getBugs(req, res) {
     try {
         const bugs = await query();
@@ -68,3 +68,31 @@ export async function deleteBug(req, res) {
     }
 }
 
+
+export async function downloadBugsPDFr(req,res) {
+    try{
+        const bugs = await query()
+
+        const doc = new PDFDocument()
+        res.setHeader('Content-Disposition', 'attachment; filename="bugs-report.pdf"')
+        res.setHeader('Content-Type', 'application/pdf')
+
+        doc.pipe(res)
+
+        doc.fontSize(20).text('bug Report', {align:'center'})
+        doc.moveDown()
+
+        bugs.forEach((bug,idx) => {
+            doc.fontSize(12).text(`Bug #${idx +1}`)
+            doc.text(`Title: ${bug.title}`)
+            doc.text(`Serverity: ${bug.severity}`)
+            doc.text(`Description: ${bug.description || 'N/A'} `)
+            doc.text(`Created: ${new Date(bug.createdAt).toLocaleString()}`)
+            doc.moveDown()
+        });
+        doc.end()
+    }catch(err){
+        console.log(`failed to generate PDF`,err)
+        res.status(500).send({err:'failed to generate PDF'})
+    }
+}

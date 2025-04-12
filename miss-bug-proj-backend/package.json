@@ -14,6 +14,7 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "miss-bug-proj-backend": "file:",
+    "pdfkit": "^0.17.0",
     "uuid": "^11.1.0"
   },
   "type": "module"

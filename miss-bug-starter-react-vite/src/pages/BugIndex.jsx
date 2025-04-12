@@ -10,6 +10,9 @@ export function BugIndex() {
     const [filterBy,setFilterBy] = useState({
         txt:'', severity: '',
     })
+    function onDownloadPDF() {
+        window.open('http://localhost:3030/api/bug/export/pdf', '_blank')
+    }
 
 
     const filterBugs = bugs.filter(bug => {
@@ -101,6 +104,7 @@ export function BugIndex() {
                 onChange={(ev) => setFilterBy({...filterBy, severity: ev.target.value})}
                 />
             </section>
+                <button onClick={onDownloadPDF}>Download PDF Report</button>
                 <button onClick={onAddBug}>Add Bug </button>
                 <BugList bugs={filterBugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
             </main>
