@@ -13,6 +13,30 @@ export async function getBugs(req, res) {
 
 export async function getBugsById(req, res) {
     try {
+
+        const visitedBugs = JSON.parse(req.cookies.visitedBugs|| '[]' )
+        const bugId = req.params.id
+        console.log(' User requested bug ID:', req.params.id)
+        console.log(' Cookie:', req.cookies.visitedBugs)
+        
+
+        if(!visitedBugs.includes(bugId)) visitedBugs.push(bugId)  // Avoid duplicates
+
+        if(visitedBugs.length > 3) {
+            console.log('Limited Reached! wait, limit:',visitedBugs)
+            return res.status(401).send('wait for a bit')
+
+        }
+
+
+        res.cookie('visitedBugs', JSON.stringify(visitedBugs),
+        {maxAge:7000, httpOnly:false,
+            sameSite:'lax'
+
+        })
+
+
+
         const bug = await getById(req.params.id);
         if(!bug) return res.status(404).send({err: 'bug nott found'});
         res.send(bug);
@@ -43,3 +67,4 @@ export async function deleteBug(req, res) {
         res.status(500).send({err:'failed to remove bug'});
     }
 }
+

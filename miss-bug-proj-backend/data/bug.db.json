@@ -2,7 +2,7 @@
   {
     "_id": "b102",
     "title": "Broken dark mode",
-    "severity": 2,
+    "severity": 2323,
     "description": "Dark mode flickers on reload",
     "createdAt": 1712600000000
   },
@@ -14,8 +14,15 @@
   },
   {
     "title": "2323",
-    "severity": 2323232323,
+    "severity": 2323,
     "_id": "1849afe0-e62d-44cc-aeef-e1fad3fb305e",
     "createdAt": 1744369634694
+  },
+  {
+    "title": "23",
+    "severity": 23,
+    "description": "23",
+    "_id": "aea9946a-ef87-4344-8839-6decba209827",
+    "createdAt": 1744475873526
   }
 ]

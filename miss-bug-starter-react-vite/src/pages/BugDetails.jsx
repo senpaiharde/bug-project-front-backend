@@ -18,10 +18,14 @@ export function BugDetails() {
 
     async function loadBug() {
         try {
-            const bug = await getBugs(bugId)
-            setBug(bug)
+            const bug = await getBugsById(bugId)
+            return setBug(bug)
         } catch (err) {
-            showErrorMsg('Cannot load bug')
+            if(err.response?.status == 401){
+                showErrorMsg('Wait 7s and try again')
+            }else{
+                showErrorMsg('Cannot load bug')
+            }
 
         }
     }
