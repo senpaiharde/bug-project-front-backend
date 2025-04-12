@@ -2,7 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import bugRoutes from './api/bug.routes.js';
-
+import autoRoutes from './api/auto.routes.js'
 const app = express()
 
 app.use(express.json());
@@ -22,3 +22,5 @@ app.get('/',(req,res) => {
 app.listen(3030,() => {
     console.log('server ready at port 3030')
 });
+
+app.use('api/auth',autoRoutes)
