@@ -15,8 +15,9 @@ const JWT_SECRET = 'missBugSecretKey'
 
 export async function signup(req,res) {
     const {email,password, fullname} = req.body
+    console.log(' Signup body:', req.body)
     if (!email || !password || !fullname) return res.status(400).send('Missing fields')
-
+        console.log(' Signup route hit')
     const users = await _loadUsers()
     const exists = users.find(u => u.email === email)
 
@@ -33,15 +34,15 @@ export async function signup(req,res) {
 }
 
 export async function login(req,res) {
-    const {email,passowrd} = res.body
+    const {email,password} = req.body
     const users = await _loadUsers()
     const user = users.find(u => u.email === email)
     if(!user) return res.status(401).send('Invalid credentials')
     
-    const match =await bcrypt.compare(passowrd, user.passowrd)
+        const match = await bcrypt.compare(password, user.password)
     if(!match) return res.status(401).send('wtrong password')
 
-        
+
     const token = _createToken(user)
     res.send({token, user:{_id: user._id, email, fullname:user.fullname}})
 }

@@ -23,4 +23,4 @@ app.listen(3030,() => {
     console.log('server ready at port 3030')
 });
 
-app.use('api/auth',autoRoutes)
+app.use('/api/auth',autoRoutes)
