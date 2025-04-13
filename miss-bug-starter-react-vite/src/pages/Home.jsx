@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import img from '../assets/img/logo.png';
+
 
 import { Link } from 'react-router-dom';
 import { logout } from '../services/auth.service';
-
+import logo from '../assets/img/image (1).png'
 export function Home({user, setUser}) {
   
 
@@ -12,24 +12,31 @@ export function Home({user, setUser}) {
     setUser(null);
   }
   return (
-    <section>
+    <section className='section'>
       {user ? (
-        <><h2>Welcome {user.fullname || user.email}</h2> 
-        <button onClick={onLogout}>Logout</button> 
-        </>
+        <div className='home'><h2>Welcome {user.fullname || user.email}</h2> 
+        <button className='homelog' onClick={onLogout}>Logout</button> 
+        </div>
       ) : (
-        <>
+        <div className='home'>
           <h1>
-            Welcome to MissBug <img src={img} alt="bug" />
+          Learn More About Common Beetles 
           </h1>
+          
           <Link to="/login">
-            <button>Login</button>
+            <button className='homelog'>Login</button>
           </Link>
           <Link to="/signup">
-            <button>Signup</button>
+            <button className='homelog'>Signup</button>
           </Link>
-        </>
+        </div>
       )}
+      <img alt="Billbugs"
+          src={logo} />
+          <img alt="Billbugs"
+          src={logo} />
+          <img alt="Billbugs"
+          src={logo} />
     </section>
   );
 }

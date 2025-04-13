@@ -208,3 +208,33 @@ a {
     display: block;
     margin: auto;
 }
+
+
+.home{
+    text-align: center;
+    
+    width: 100%;
+    background-color: #F2E6D4;
+    padding-bottom:319px;
+    padding-top: 15px;
+    
+    .homelog{
+        width: 155px;
+        height: 25px;
+        color: black;
+        margin-right: 15px;
+        text-align: center;
+        justify-content: center;
+        cursor: pointer;
+        background-color: rgb(145, 233, 14);
+        &:hover{
+            text-decoration: underline;
+            color: white;
+    
+        }
+    }
+
+}
+.section{
+    background-color: #F2E6D4;
+}
