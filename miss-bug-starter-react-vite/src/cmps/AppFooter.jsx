@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { showSuccessMsg } from '../services/event-bus.service';
+import { Link } from 'react-router-dom';
 
 export function AppFooter() {
   useEffect(() => {
@@ -10,7 +11,7 @@ export function AppFooter() {
     <footer className="container-footer">
       <ul className="container-footer-ul">
       <li className="container-footer-li">
-          <a className="container-a" href="https://blog.studybugs.com/">
+          <a className="container-a" href="#">
             Blog
           </a>
         </li>
@@ -20,20 +21,20 @@ export function AppFooter() {
           </a>
         </li>
         <li className="container-footer-li">
-          <a className="container-a" href="https://studybugs.com/privacy">
+          <a className="container-a" href="#">
           Privacy
           </a>
         </li>
         <li className="container-footer-li">
-          <a className="container-a" href="https://studybugs.com/about">
+          <a className="container-a" href="#">
           About
           </a>
         </li>
         <li className="container-footer-li">
             
-          <a className="container-a" href="https://blog.studybugs.com/">
+          <Link className="container-a" to="/signup">
           Sign In
-          </a>
+          </Link >
         </li>
         
       </ul>

@@ -300,5 +300,34 @@ a {
 .loginForm{
     text-align: center;
     gap: 15px;
+    background-color: #F2E6D4;
+    padding-top: 15px;
+    padding-bottom: 550px;
+
+}
+.login{
+    color: black;
+    font-size: 3em;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: hsla(0, 0%, 100%, 0);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    -moz-transition: all .2s ease-out;
+    -webkit-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+    cursor: pointer;
+    &:hover{
+        text-decoration: underline;
+        color: white;
+    }
+}
+
+.bug-details-main-layout{
+    text-align: center;
+    background-color:#F2E6D4;
+    padding-top: 15px;
+    padding-bottom: 555px;
 
 }

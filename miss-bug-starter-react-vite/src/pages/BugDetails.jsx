@@ -31,12 +31,12 @@ export function BugDetails() {
     }
 
     if (!bug) return <h1>loadings....</h1>
-    return <div className="bug-details main-layout">
-        <h3>Bug Details 🐛</h3>
-        <h4>{bug.title}</h4>
-        <p>Severity: <span>{bug.severity}</span></p>
-        <p>description: <span>{bug.description}</span></p>
-        <Link to="/bug">Back to List</Link>
+    return <div className="bug-details-main-layout">
+        <h3>🐛 Bug Details 🐛</h3>
+        <h4 >🐛 Name: {bug.title} 🐛</h4>
+        <p>🐛 Severity: <span>{bug.severity} 🐛</span></p>
+        <p>🐛 description: <span>{bug.description} 🐛</span></p>
+        <Link style={{color:'black'}} to="/bug">🐛 Back to List 🐛</Link>
     </div>
 
 }
