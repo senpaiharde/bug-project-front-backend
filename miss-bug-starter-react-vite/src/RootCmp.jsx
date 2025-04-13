@@ -9,6 +9,7 @@ import { Login } from './cmps/Login.jsx';
 import { Signup } from './cmps/Signup.jsx';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { logout } from './services/auth.service.js';
 
 export function App() {
   const [user, setUser] = useState(null);
@@ -26,6 +27,10 @@ export function App() {
     }
     
     const userData = decodeToken(token);
+    if(userData.exp * 1000 < Date.now()) {
+        logout()
+        return
+    }
     console.log(' Decoded user from token:', userData);
     setUser(userData);
   }, []);
