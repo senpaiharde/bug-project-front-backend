@@ -19,15 +19,15 @@ export function AppHeader({ user, setUser }) {
         <div className="UserHeader">
           
           {user ? (
-        <><h2>Welcome {user.fullname || user.email}</h2> 
-        <button onClick={onLogout}>Logout</button> 
+        <><h2>Welcome  {user.fullname || user.email}</h2> 
+        <button  className='headerbutton' onClick={onLogout}>Logout</button> 
         </>
       ) : (<div> 
                 <Link to="/login">
-                  <button>Login</button>
+                  <button className='headerbutton'>Login</button>
                 </Link>
                 <Link to="/signup">
-                  <button>Signup</button>
+                  <button className='headerbutton'>Signup</button>
                 </Link></div>)}
           
         </div>

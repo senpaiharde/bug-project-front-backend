@@ -15,22 +15,32 @@ export function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken')
-    
+    const token = localStorage.getItem('accessToken');
+
     axios.defaults.baseURL = 'http://localhost:3030/api';
     axios.defaults.withCredentials = true;
     if (token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-        
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
       delete axios.defaults.headers.common['Authorization'];
     }
-    
+
     const userData = decodeToken(token);
-    if(userData.exp * 1000 < Date.now()) {
-        logout()
-        return
+
+    if (!userData || !userData.exp) {
+      console.warn('Invalid or expired token');
+      logout();
+      return;
     }
+
+    if (userData.exp * 1000 < Date.now()) {
+      console.warn('Token expired');
+      logout();
+      return;
+    }
+
+    setUser(userData);
+
     console.log(' Decoded user from token:', userData);
     setUser(userData);
   }, []);

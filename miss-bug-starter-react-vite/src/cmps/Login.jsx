@@ -28,8 +28,8 @@ export function Login({setUser}) {
   }
 
   return (
-    <section>
-      <h2>Login</h2>
+    <section className='loginForm'>
+      <h2 className='login'>Login</h2>
       <form onSubmit={onSubmit}>
         <input name="email" placeholder="Email" onChange={handleChange} />
         <input name="password" placeholder="Password" type="password" onChange={handleChange} />

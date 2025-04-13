@@ -1,5 +1,5 @@
 import React from 'react'
-import './assets/style/main.css'
+import './assets/styles/main.scss'
 
 import ReactDOM from 'react-dom/client'
 import { App } from './RootCmp'
