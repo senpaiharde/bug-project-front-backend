@@ -2,6 +2,7 @@ import { remove,query,getById,save } from "../services/bug.service.js";
 import PDFDocument from 'pdfkit'
 export async function getBugs(req, res) {
     try {
+        console.log(' Backend: getBugs hit')
         const bugs = await query();
         res.send(bugs);
     }catch(err){
