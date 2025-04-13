@@ -34,13 +34,15 @@ export async function signup(req,res) {
 }
 
 export async function login(req,res) {
-    const {email,password} = req.body
+    const { email, password } = req.body
+
     const users = await _loadUsers()
     const user = users.find(u => u.email === email)
     if(!user) return res.status(401).send('Invalid credentials')
     
         const match = await bcrypt.compare(password, user.password)
-    if(!match) return res.status(401).send('wtrong password')
+
+    if(!match) return res.status(401).send('wrong password')
 
 
     const token = _createToken(user)
@@ -49,7 +51,7 @@ export async function login(req,res) {
 
 
 function _createToken(user) {
-    return jwt.sign({ _id : user._id , email: user.email}, JWT_SECRET, {expiresIn: '1h'})
+    return jwt.sign({ _id : user._id , email: user.email, fullname: user.fullname }, JWT_SECRET, {expiresIn: '1h'})
 }
 
 function _makeId(length = 8) {

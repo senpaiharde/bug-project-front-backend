@@ -4,7 +4,7 @@ import img from '../assets/img/logo.png';
 import { Link } from 'react-router-dom';
 import { logout } from '../services/auth.service';
 
-export function Home({user,setUser}) {
+export function Home({user, setUser}) {
   
 
   function onLogout() {
@@ -14,8 +14,8 @@ export function Home({user,setUser}) {
   return (
     <section>
       {user ? (
-        <><h2>Welcome {user.fullname}</h2> 
-        <button onClick={onLogout}></button> 
+        <><h2>Welcome {user.fullname || user.email}</h2> 
+        <button onClick={onLogout}>Logout</button> 
         </>
       ) : (
         <>

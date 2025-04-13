@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router';
 import { login } from '../services/auth.service';
 import { Link } from 'react-router-dom';
 
-export function Login(setUser) {
-  const [credentials, setCredentials] = useState({ email: '', password: '', fullname: '' });
+export function Login({setUser}) {
+  const [credentials, setCredentials] = useState({ email: '', password: '',});
 
   const navigate = useNavigate();
 
@@ -17,10 +17,12 @@ export function Login(setUser) {
     ev.preventDefault();
     try {
       const user = await login(credentials);
-      alert(`Welcome ${user.fullname}`);
       setUser(user)
+      alert(`Welcome ${user.fullname}`);
+      
       navigate('/');
     } catch (err) {
+        console.error('Login failed:', err.response?.data || err.message)
       alert('login failed');
     }
   }

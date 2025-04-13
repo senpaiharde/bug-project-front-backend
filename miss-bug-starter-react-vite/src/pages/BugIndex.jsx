@@ -105,7 +105,7 @@ export function BugIndex() {
                 />
             </section>
                 <button onClick={onDownloadPDF}>Download PDF Report</button>
-                <button onClick={onAddBug}>Add Bug </button>
+                <button onClick={() => onAddBug()}>Add Bug </button>
                 <BugList bugs={filterBugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
             </main>
         </section>

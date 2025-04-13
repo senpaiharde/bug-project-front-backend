@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { signup } from '../services/auth.service';
 import { Link } from 'react-router-dom';
 
-export function Signup(setUser) {
+export function Signup({setUser}) {
   const [credentials, setCredentials] = useState({ email: '', password: '', fullname: '' });
 
   const navigate = useNavigate();

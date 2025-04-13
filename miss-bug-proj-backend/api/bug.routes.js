@@ -7,19 +7,17 @@ import { downloadBugsPDFr } from './bug.controller.js';
 
 import { requireAuth } from '../middlewares/requireAuth.js';
 
-const router = express.Router();
-// List all bugs2
-router.get('/', getBugs);
 
+// List all bugs2
+
+const router = express.Router();
+router.get('/export/pdf',downloadBugsPDFr)
 // Get one bug by setted id
 
-router.get('/export/pdf',downloadBugsPDFr)
-router.get('/:id', getBugsById);
-
-router.put('/', saveBug);
-
-
+router.get('/', getBugs)
+router.get('/:id', getBugsById)
 router.post('/', requireAuth, saveBug)
-router.delete('/:id',requireAuth, deleteBug)
+router.put('/', requireAuth, saveBug)
+router.delete('/:id', requireAuth, deleteBug)
 
 export default router;
