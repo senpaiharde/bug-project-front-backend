@@ -41,7 +41,7 @@ export function App() {
   }
   return (
     <Router>
-      <AppHeader />
+      <AppHeader user={user} setUser={setUser} />
       <main className="container">
         <Routes>
           <Route path="/" element={<Home user={user} setUser={setUser} />} />

@@ -19,7 +19,7 @@ export function BugDetails() {
     async function loadBug() {
         try {
             const bug = await getBugsById(bugId)
-            return setBug(bug)
+             setBug(bug)
         } catch (err) {
             if(err.response?.status == 401){
                 showErrorMsg('Wait 7s and try again')

@@ -31,5 +31,6 @@ export async function deleteBug(id) {
     await axios.delete(`bug/${id}`);
   } catch (err) {
     if (err.response?.status === 401) alert('you most log in to delete a bug.');
+    throw err
   }
 }
