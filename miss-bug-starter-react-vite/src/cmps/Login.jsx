@@ -31,12 +31,12 @@ export function Login({setUser}) {
     <section className='loginForm'>
       <h2 className='login'>Login</h2>
       <form onSubmit={onSubmit}>
-        <input name="email" placeholder="Email" onChange={handleChange} />
-        <input name="password" placeholder="Password" type="password" onChange={handleChange} />
-        <button>Login</button>
+        <input  style={{marginLeft:'75px'}} name="email" placeholder="Email" onChange={handleChange} />
+        <input style={{marginLeft:'15px'}} name="password" placeholder="Password" type="password" onChange={handleChange} />
+        <button style={{marginLeft:'15px'}} className='headerbutton'>Login</button>
       </form>
       <Link to="/signup">
-        <button>Signup</button>
+        <button style={{marginTop:'15px'}} className='headerbutton'>Signup</button>
       </Link>
     </section>
   );

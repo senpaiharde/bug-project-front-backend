@@ -13,14 +13,14 @@ export function BugList({ bugs =[] , onRemoveBug, onEditBug }) {
                 <li className="bug-preview" key={bug._id}>
                     <BugPreview bug={bug} />
                     <div>
-                        <button
+                        <button className='headerbutton'
                             onClick={() => {
                                 onRemoveBug(bug._id)
                             }}
                         >
-                            x
+                            Delete
                         </button>
-                        <button
+                        <button className='headerbutton'
                             onClick={() => {
                                 onEditBug(bug)
                             }}

@@ -147,6 +147,10 @@ a {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
+    padding-left: 35px;
+    padding-right: 35px;
+    
+    background-color: #F2E6D4;
 }
 
 .bug-list li {
@@ -154,7 +158,7 @@ a {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    background-color: rgb(145, 233, 14);
+    background-color:#282526;
 }
 .bug-preview {
     text-align: center;
@@ -237,4 +241,64 @@ a {
 }
 .section{
     background-color: #F2E6D4;
+}
+
+.bug-area{
+    background-color: #F2E6D4;
+    padding-top: 15px;
+    padding-bottom: 200px;
+    
+    .bugbutton{
+        width: 155px;
+        height: 25px;
+        color: black;
+        margin-right: 15px;
+        text-align: center;
+        justify-content: center;
+        cursor: pointer;
+        background-color: rgb(145, 233, 14);
+        &:hover{
+            text-decoration: underline;
+            color: white;
+    
+        }
+    }
+}
+
+.bug-area h1{
+    text-align: center;
+    font-size: 35px;
+}
+.bugsection{
+    text-align: center;
+    gap: 15px;
+    
+}
+.buginput{
+    margin-right: 15px;
+}
+
+
+.bug-details-p{
+    color: white !important;
+    font-size: 1.28em;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: hsla(0, 0%, 100%, 0);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    -moz-transition: all .2s ease-out;
+    -webkit-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+    cursor: pointer;
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+.loginForm{
+    text-align: center;
+    gap: 15px;
+
 }

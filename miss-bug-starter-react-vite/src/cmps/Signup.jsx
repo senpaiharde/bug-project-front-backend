@@ -26,16 +26,16 @@ export function Signup({setUser}) {
   }
 
   return (
-    <section>
-      <h2>Login</h2>
+    <section className='loginForm'>
+      <h2 className='login'>sign up</h2>
       <form onSubmit={onSubmit}>
-        <input name="email" placeholder="Email" onChange={handleChange} />
-        <input name="password" placeholder="Password" type="password" onChange={handleChange} />
-        <input name="fullname" placeholder="Full Name" onChange={handleChange} />
-        <button>Signup</button>
+      <input  style={{marginLeft:'75px'}} name="email" placeholder="Email" onChange={handleChange} />
+      <input style={{marginLeft:'15px'}}  name="password" placeholder="Password" type="password" onChange={handleChange} />
+        <input style={{marginLeft:'15px'}} placeholder="Full Name" onChange={handleChange} />
+        <button style={{marginLeft:'15px'}} className='headerbutton'>Signup</button>
       </form>
       <Link to="/login">
-        <button>Login</button>
+      <button style={{marginTop:'15px'}} className='headerbutton'>Login</button>
       </Link>
     </section>
   );

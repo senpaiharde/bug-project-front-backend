@@ -86,26 +86,27 @@ export function BugIndex() {
     }
 
     return (
-        <section >
-            <h3>Bugs App</h3>
+        <section className='bug-area'>
+            <h1>Bugs Area</h1>
             
-            <main>
-            <section>
-                <input
+            <main className='bugsection'>
+            <section >
+                <input className='buginput'
                 type='text'
                 placeholder='Search By title'
                 value={filterBy.txt}
                 onChange={(ev) => setFilterBy({...filterBy, txt: ev.target.value})}
                 />
                 <input
+                className='buginput'
                 type='number'
                 placeholder='min siverity'
                 value={filterBy.severity}
                 onChange={(ev) => setFilterBy({...filterBy, severity: ev.target.value})}
                 />
             </section>
-                <button onClick={onDownloadPDF}>Download PDF Report</button>
-                <button onClick={() => onAddBug()}>Add Bug </button>
+                <button className='bugbutton' onClick={onDownloadPDF}>Download PDF Report</button>
+                <button className='bugbutton' onClick={() => onAddBug()}>Add Bug </button>
                 <BugList bugs={filterBugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
             </main>
         </section>
