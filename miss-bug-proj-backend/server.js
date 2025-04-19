@@ -8,8 +8,17 @@ const app = express()
 app.use(express.json());
 app.use(cookieParser());
 
+// Allow credentials & adjust origins as needed
+const FRONTENDS = [
+    'http://localhost:8080',  
+    'http://localhost:5173'
+]
 app.use(cors({
-    origin:'http://localhost:5173',
+    origin: (origin,cb) => {
+        if(!origin) return cb(null,true)
+        if(FRONTENDS.includes(origin)) return cb(null,true)
+            cb(new Error(`Origin ${origin} not allowed by CORS`))
+    },
     credentials: true
 }));
 
