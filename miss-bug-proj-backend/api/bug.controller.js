@@ -48,12 +48,12 @@ export async function saveBug(req, res) {
     } else {
       const existing = await getById(bugDate._id);
       if (!existing) return res.status(404).send({ err: 'bug not found' });
-      if (req.user.role !== 'admin' && existing.ownerId !== res.user._id) {
+      if (req.user.role !== 'admin' && existing.ownerId !== req.user._id) {
         return res.status(403).send({ err: 'not your Bug' });
       }
       bugDate.ownerId = existing.ownerId;
     }
-    const savebug = await save(req.body);
+    const savebug = await save(bugDate);
     res.send(savebug);
   } catch (err) {
     console.log('failed to save bug', err);
@@ -65,7 +65,7 @@ export async function deleteBug(req, res) {
   try {
     const bug = await getById(req.params.id);
     if (!bug) return res.status(404).send({ err: 'Bug not found' });
-    if (res.user.role !== 'admin' && bug.ownerId !== res.user._id) {
+    if (req.user.role !== 'admin' && bug.ownerId !== req.user._id) {
       return res.status(403).send({ err: 'Not your Bug' });
     }
 

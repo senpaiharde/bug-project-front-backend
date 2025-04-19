@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 
 
 export function BugIndex({user}) {
+    console.log('Current user:', user)   
     const [bugs, setBugs] = useState([])
     const [filterBy,setFilterBy] = useState({
         txt:'', severity: '',

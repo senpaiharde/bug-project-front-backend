@@ -37,7 +37,7 @@ export function AppHeader({ user, setUser }) {
         </div>
 
         <nav className="app-nav">
-          <NavLink to="/">Home</NavLink> | <NavLink to="/tracker/bug">Bugs</NavLink> |
+          <NavLink to="/">Home</NavLink> | <NavLink user={user} to="/tracker/bug">Bugs</NavLink> |
           <NavLink to="/about">About</NavLink>
         </nav>
       </div>

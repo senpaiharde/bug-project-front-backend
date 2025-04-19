@@ -6,6 +6,7 @@ import { AppFooter } from "./AppFooter";
 
 
 export function DashboardLayout({user, setUser}) {
+    console.log('Current user:', user)   
     return(
         <div className="dashBoard">
             <aside className="dashBoard_sideBar">
