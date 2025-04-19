@@ -29,22 +29,17 @@ export function App() {
 
     const userData = decodeToken(token);
 
-    if (!userData || !userData.exp) {
+    if (!userData || !userData.exp || userData.exp * 1000 < Date.now()) {
       console.warn('Invalid or expired token');
       logout();
       return;
     }
 
-    if (userData.exp * 1000 < Date.now()) {
-      console.warn('Token expired');
-      logout();
-      return;
-    }
+    
 
     setUser(userData);
 
-    console.log(' Decoded user from token:', userData);
-    setUser(userData);
+    
   }, []);
 
   function decodeToken(token) {
@@ -67,7 +62,7 @@ export function App() {
           <Route path="/" element={<DashboardLayout user={user} setUser={setUser}/>}></Route>
           <Route index element={<Home user={user} setUser={setUser} />} />
 
-          <Route path="tracker/bug" element={<BugIndex />} />
+          <Route path="tracker/bug" element={<BugIndex user={user} />} />
           <Route path="tracker/bug/:bugId" element={<BugDetails user={user} />} />
 
           <Route path="/settings" element={<></>}></Route>

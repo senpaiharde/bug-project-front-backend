@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 
 
-export function BugIndex() {
+export function BugIndex({user}) {
     const [bugs, setBugs] = useState([])
     const [filterBy,setFilterBy] = useState({
         txt:'', severity: '',
@@ -107,7 +107,11 @@ export function BugIndex() {
             </section>
                 <button className='bugbutton' onClick={onDownloadPDF}>Download PDF Report</button>
                 <button className='bugbutton' onClick={() => onAddBug()}>Add Bug </button>
-                <BugList bugs={filterBugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
+                <BugList 
+                user={user}
+                bugs={filterBugs} 
+                onRemoveBug={onRemoveBug} 
+                onEditBug={onEditBug} />
             </main>
         </section>
     )

@@ -24,13 +24,13 @@ export async function signup(req,res) {
     if(exists) return res.status(400).send('user already exists')
 
     const hash = await bcrypt.hash(password,10)
-    const user ={_id:_makeId(), email, fullname, password: hash}
+    const user ={_id:_makeId(), email, fullname, password: hash,role:'user'}
     users.push(user)
     await _saveUsers(users)
 
 
     const token = _createToken(user)
-    res.send({token, user:{_id:user._id, email, fullname}})
+    res.send({token, user:{_id:user._id, email, fullname,role:user.role}})
 }
 
 export async function login(req,res) {
@@ -46,12 +46,21 @@ export async function login(req,res) {
 
 
     const token = _createToken(user)
-    res.send({token, user:{_id: user._id, email, fullname:user.fullname}})
+    res.send({token,
+         user:{_id: user._id, email,
+         fullname:user.fullname}})
 }
 
 
 function _createToken(user) {
-    return jwt.sign({ _id : user._id , email: user.email, fullname: user.fullname }, JWT_SECRET, {expiresIn: '1h'})
+    return jwt.sign({
+         _id : user._id ,
+         email: user.email,
+          fullname: user.fullname,
+          role:user.role,
+        }, 
+          JWT_SECRET,
+           {expiresIn: '1h'})
 }
 
 function _makeId(length = 8) {

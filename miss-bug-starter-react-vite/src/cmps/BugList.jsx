@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { BugPreview } from './BugPreview';
 
-export function BugList({ bugs = [], onRemoveBug, onEditBug }) {
+export function BugList({ bugs = [],user, onRemoveBug, onEditBug }) {
   if (!Array.isArray(bugs)) {
     console.error('BugList expected array but got:', bugs);
     return <p>bugs not available</p>;
@@ -11,6 +11,8 @@ export function BugList({ bugs = [], onRemoveBug, onEditBug }) {
       {bugs.map((bug) => (
         <li className="bug-preview" key={bug._id}>
           <BugPreview bug={bug} />
+          {
+          (user.role === 'admin' || bug.ownerId === user._id)&& (
           <div>
             <button
               className="headerbutton"
@@ -26,7 +28,8 @@ export function BugList({ bugs = [], onRemoveBug, onEditBug }) {
               }}>
               Edit
             </button>
-          </div>
+          </div>)}
+          
           <Link bugs={bug} to={`/tracker/bug/${bug._id}`}>
             Details
           </Link>

@@ -3,24 +3,28 @@
     "_id": "R1N2Bj0Z",
     "email": "xxslavan1@gmail.com",
     "fullname": "slava",
-    "password": "$2b$10$KpI6PmHlWse1F6os8MYNc.igItFvBVjaNeqZqrjPiGpsQY7vAsP/e"
+    "password": "$2b$10$KpI6PmHlWse1F6os8MYNc.igItFvBVjaNeqZqrjPiGpsQY7vAsP/e",
+    "role": "user"
   },
   {
     "_id": "0rGGhCrF",
     "email": "xxslavan11@gmail.com",
     "fullname": "slava",
-    "password": "$2b$10$vub9.vrfpx7FRtA2N.SbX.j0fQ9IcOKqGoekAC3/yQ2JVsovp3UJm"
+    "password": "$2b$10$vub9.vrfpx7FRtA2N.SbX.j0fQ9IcOKqGoekAC3/yQ2JVsovp3UJm",
+    "role": "admin"
   },
   {
     "_id": "56D8mgKn",
     "email": "xxslavan111@gmail.com",
     "fullname": "slava",
-    "password": "$2b$10$ckT2cjAjMWx8gnEnTAtRNuqwCd8cTOMLCM.2YNjaHnhfNeU4ZKehW"
+    "password": "$2b$10$ckT2cjAjMWx8gnEnTAtRNuqwCd8cTOMLCM.2YNjaHnhfNeU4ZKehW",
+    "role": "admin"
   },
   {
     "_id": "ZAVQk58L",
     "email": "xxslavan1111@gmail.com",
     "fullname": "slava",
-    "password": "$2b$10$.PQGRuLgtIBoL88hxqthDulQjXywNlOf5fVxaUivjvVDUemQfS6ZG"
+    "password": "$2b$10$.PQGRuLgtIBoL88hxqthDulQjXywNlOf5fVxaUivjvVDUemQfS6ZG",
+    "role": "user"
   }
 ]
