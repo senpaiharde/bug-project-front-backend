@@ -1,0 +1,12 @@
+{
+    "name": "missbug-stack",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "docker compose up -d --build",
+        "down": "docker compose down"
+    },
+    "dependencies": {
+        "missbug-stack": "file:"
+    }
+}
