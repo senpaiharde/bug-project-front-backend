@@ -3,6 +3,7 @@ import { showSuccessMsg, showErrorMsg } from '../../services/event-bus.service.j
 import {BugList} from '../../cmps/BugList.jsx';
 import { useState } from 'react'
 import { useEffect } from 'react'
+import { Navigate } from 'react-router';
 
 
 export function BugIndex({user}) {
@@ -85,8 +86,9 @@ export function BugIndex({user}) {
             showErrorMsg('Cannot update bug')
         }
     }
-
-    return (
+    
+        
+    return  ( 
         <section className='bug-area'>
             <h1>Bugs Area</h1>
             

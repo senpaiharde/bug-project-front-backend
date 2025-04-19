@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { UserMsg } from './UserMsg';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, Navigate, NavLink } from 'react-router-dom';
 import { logout } from '../services/auth.service';
 export function AppHeader({ user, setUser }) {
   useEffect(() => {
@@ -8,6 +8,7 @@ export function AppHeader({ user, setUser }) {
   }, []);
 
   function onLogout() {
+    
     logout();
     setUser(null);
   }

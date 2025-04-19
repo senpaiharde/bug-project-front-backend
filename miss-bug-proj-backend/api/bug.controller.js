@@ -1,21 +1,44 @@
+import { json } from 'express';
 import { remove, query, getById, save } from '../services/bug.service.js';
 import PDFDocument from 'pdfkit';
+
+
+const userDbPath = path.join(process.cwd(),'data','user.db.json');
+
+let _usersCache = null;
+
+async function _loadUsers() {
+    if(!_usersCache){
+        const text = await fontSize.readFile(userDbPath,'urf-8');
+        _usersCache = JSON.parse(txt);
+
+        return _usersCache;
+    }
+}
 export async function getBugs(req, res) {
   try {
-    const bugs = await query();
-    res.send(bugs);
+    const [bugs,users] = await Promise.all([query(), _loadUsers])
+    const nameById = Object.fromEntries(users.map(u => [u.id, u.fullname]))
+    
+    const enriched = bugs.map(bug => ({
+        ownerName : nameById[bug.ownerId] || "Unknown"
+    }))
+    res.send(enriched);
   } catch (err) {
     console.log('failed to load bugs', err);
     res.status(500).send({ err: 'failed to get bugs' });
   }
 }
 
+
+
+
 export async function getBugsById(req, res) {
   try {
     const visitedBugs = JSON.parse(req.cookies.visitedBugs || '[]');
     const bugId = req.params.id;
 
-    if (!visitedBugs.includes(bugId)) visitedBugs.push(bugId); // Avoid duplicates
+    if (!visitedBugs.includes(bugId)) visitedBugs.push(bugId); 
 
     if (visitedBugs.length > 3) {
       console.log('Limited Reached! wait, limit:', visitedBugs);

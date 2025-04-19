@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { BugPreview } from './BugPreview';
 
-export function BugList({ bugs = [],user, onRemoveBug, onEditBug }) {
+export function BugList({ bugs = [],user ={}, onRemoveBug, onEditBug }) {
   if (!Array.isArray(bugs)) {
     console.log('Current user:', user)   
     console.error('BugList expected array but got:', bugs);
@@ -16,11 +16,15 @@ export function BugList({ bugs = [],user, onRemoveBug, onEditBug }) {
           userId: user?._id, 
           userRole: user?.role 
         })
+
+        const canModify =
+        user?.role === 'admin' ||
+        bug.ownerId === user?._id
       return(
         <li className="bug-preview" key={bug._id}>
           <BugPreview bug={bug} user={user} />
           {
-          (user.role === 'admin' || bug.ownerId === user._id)&& (
+          canModify && (
           <div>
             <button
               className="headerbutton"
