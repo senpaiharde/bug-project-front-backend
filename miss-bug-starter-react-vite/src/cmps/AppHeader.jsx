@@ -17,23 +17,27 @@ export function AppHeader({ user, setUser }) {
       <div className="header-container">
         <h1>Bugs Library </h1>
         <div className="UserHeader">
-          
           {user ? (
-        <><h2>Welcome  {user.fullname || user.email}</h2> 
-        <button  className='headerbutton' onClick={onLogout}>Logout</button> 
-        </>
-      ) : (<div> 
-                <Link to="/login">
-                  <button className='headerbutton'>Login</button>
-                </Link>
-                <Link to="/signup">
-                  <button className='headerbutton'>Signup</button>
-                </Link></div>)}
-          
+            <>
+              <h2>Welcome {user.fullname || user.email}</h2>
+              <button className="headerbutton" onClick={onLogout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <div>
+              <Link to="/login">
+                <button className="headerbutton">Login</button>
+              </Link>
+              <Link to="/signup">
+                <button className="headerbutton">Signup</button>
+              </Link>
+            </div>
+          )}
         </div>
 
         <nav className="app-nav">
-          <NavLink to="/">Home</NavLink> | <NavLink to="/bug">Bugs</NavLink> |
+          <NavLink to="/">Home</NavLink> | <NavLink to="/tracker/bug">Bugs</NavLink> |
           <NavLink to="/about">About</NavLink>
         </nav>
       </div>

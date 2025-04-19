@@ -1,6 +1,6 @@
-import {  deleteBug, getBugs, saveBug } from '../services/bug.service.js'
-import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
-import { BugList } from '../cmps/BugList.jsx'
+import {  deleteBug, getBugs, saveBug } from '../../services/bug.service.js';
+import { showSuccessMsg, showErrorMsg } from '../../services/event-bus.service.js';
+import {BugList} from '../../cmps/BugList.jsx';
 import { useState } from 'react'
 import { useEffect } from 'react'
 

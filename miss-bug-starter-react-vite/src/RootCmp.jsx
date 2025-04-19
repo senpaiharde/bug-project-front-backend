@@ -1,7 +1,7 @@
 import { AppHeader } from './cmps/AppHeader.jsx';
 import { AppFooter } from './cmps/AppFooter.jsx';
 import { Home } from './pages/Home.jsx';
-import {Bugindex} from './pages/tracker/BugIndex.jsx'
+import {BugIndex} from './pages/tracker/BugIndex.jsx';
 
 import { AboutUs } from './pages/AboutUs.jsx';
 import { Route, HashRouter as Router, Routes } from 'react-router-dom';
@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { logout } from './services/auth.service.js';
 import { BugDetails } from './pages/tracker/BugDetails.jsx';
+import { DashboardLayout } from './cmps/DashboardLayout.jsx';
 
 export function App() {
   const [user, setUser] = useState(null);
@@ -60,12 +61,17 @@ export function App() {
       <AppHeader user={user} setUser={setUser} />
       <main className="container">
         <Routes>
-          <Route path="/" element={<Home user={user} setUser={setUser} />} />
-          <Route path="/bug" element={<Bugindex />} />
-          <Route path="/bug/:bugId" element={<BugDetails user={user} />} />
-          <Route path="/about" element={<AboutUs />} />
           <Route path="/login" element={<Login setUser={setUser} />} />
           <Route path="/signup" element={<Signup setUser={setUser} />} />
+
+          <Route path="/" element={<DashboardLayout user={user} setUser={setUser}/>}></Route>
+          <Route index element={<Home user={user} setUser={setUser} />} />
+
+          <Route path="tracker/bug" element={<BugIndex />} />
+          <Route path="tracker/bug/:bugId" element={<BugDetails user={user} />} />
+
+          <Route path="/settings" element={<></>}></Route>
+          <Route path="/about" element={<AboutUs />} />
         </Routes>
       </main>
       <AppFooter />
