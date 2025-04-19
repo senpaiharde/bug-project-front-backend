@@ -26,5 +26,12 @@
     "fullname": "slava",
     "password": "$2b$10$.PQGRuLgtIBoL88hxqthDulQjXywNlOf5fVxaUivjvVDUemQfS6ZG",
     "role": "user"
+  },
+  {
+    "_id": "0MHq6CYj",
+    "email": "maya@gmail.com",
+    "fullname": "maya",
+    "password": "$2b$10$VZQEvN5PaL87pOv0PfG36.yVGIaQ7nfZAn3Nu2mKgat3KG3mUVDoe",
+    "role": "user"
   }
 ]

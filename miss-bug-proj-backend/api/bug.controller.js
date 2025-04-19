@@ -1,28 +1,36 @@
 import { json } from 'express';
+import fs from 'fs/promises';
+import path from 'path';
 import { remove, query, getById, save } from '../services/bug.service.js';
 import PDFDocument from 'pdfkit';
+import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const userDbPath = path.join(process.cwd(),'data','user.db.json');
+const userDbPath = path.join(__dirname, '../data/user.db.json');
 
 let _usersCache = null;
-
 async function _loadUsers() {
-    if(!_usersCache){
-        const text = await fontSize.readFile(userDbPath,'urf-8');
-        _usersCache = JSON.parse(txt);
+  if (_usersCache) return _usersCache;
+  const text = await fs.readFile(userDbPath, 'utf-8');
+  const data = JSON.parse(text);
 
-        return _usersCache;
-    }
+  if (!Array.isArray(data)) {
+    throw new Error('user.db.json most be array of users');
+  }
+  _usersCache = data;
+  return _usersCache;
 }
 export async function getBugs(req, res) {
   try {
-    const [bugs,users] = await Promise.all([query(), _loadUsers])
-    const nameById = Object.fromEntries(users.map(u => [u.id, u.fullname]))
-    
-    const enriched = bugs.map(bug => ({
-        ownerName : nameById[bug.ownerId] || "Unknown"
-    }))
+     const [bugs, users] = await Promise.all([ query(), _loadUsers() ])
+     const nameById = Object.fromEntries(users.map(u => [u._id, u.fullname]))
+
+    const enriched = bugs.map((bug) => ({
+      ...bug,
+      ownerName: nameById[bug.ownerId] || 'Unknown',
+    }));
     res.send(enriched);
   } catch (err) {
     console.log('failed to load bugs', err);
@@ -30,15 +38,12 @@ export async function getBugs(req, res) {
   }
 }
 
-
-
-
 export async function getBugsById(req, res) {
   try {
     const visitedBugs = JSON.parse(req.cookies.visitedBugs || '[]');
     const bugId = req.params.id;
 
-    if (!visitedBugs.includes(bugId)) visitedBugs.push(bugId); 
+    if (!visitedBugs.includes(bugId)) visitedBugs.push(bugId);
 
     if (visitedBugs.length > 3) {
       console.log('Limited Reached! wait, limit:', visitedBugs);
@@ -51,8 +56,11 @@ export async function getBugsById(req, res) {
       sameSite: 'lax',
     });
 
-    const bug = await getById(bugId);
+    const [bug, users] = await Promise.all([getById(bugId), _loadUsers()]);
     if (!bug) return res.status(404).send({ err: 'bug nott found' });
+
+    const owner = users.find((u) => u._id === bug.ownerId);
+    bug.ownerName = owner?.fullname || 'Unknown';
     res.send(bug);
   } catch (err) {
     console.log('failed to get bug by id', err);

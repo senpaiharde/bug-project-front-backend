@@ -50,8 +50,9 @@ export async function login(req, res) {
   if (!match) return res.status(401).send('wrong password');
 
   const token = _createToken(user);
-  res.send({ token, user: { _id: user._id,
-     email,
+  res.send({ token, user: { 
+    _id: user._id,
+    email:   user.email,
       fullname: user.fullname,
      role:user.role
     } 
