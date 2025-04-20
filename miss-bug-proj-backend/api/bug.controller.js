@@ -24,8 +24,8 @@ async function _loadUsers() {
 }
 export async function getBugs(req, res) {
   try {
-     const [bugs, users] = await Promise.all([ query(), _loadUsers() ])
-     const nameById = Object.fromEntries(users.map(u => [u._id, u.fullname]))
+    const [bugs, users] = await Promise.all([query(), _loadUsers()]);
+    const nameById = Object.fromEntries(users.map((u) => [u._id, u.fullname]));
 
     const enriched = bugs.map((bug) => ({
       ...bug,
@@ -73,19 +73,22 @@ export async function saveBug(req, res) {
     console.log(' Received bug from frontend:', req.body);
 
     const bugDate = { ...req.body };
-
     if (!bugDate._id) {
+      // ─── CREATE ────────────────────────────────────────────────────
       bugDate.ownerId = req.user._id;
+      const created = await save(bugDate);
+      return res.status(201).json(created);
     } else {
+      // ─── UPDATE ────────────────────────────────────────────────────
       const existing = await getById(bugDate._id);
       if (!existing) return res.status(404).send({ err: 'bug not found' });
       if (req.user.role !== 'admin' && existing.ownerId !== req.user._id) {
         return res.status(403).send({ err: 'not your Bug' });
       }
       bugDate.ownerId = existing.ownerId;
+      const updated = await save(bugDate);
+      return res.json(updated);
     }
-    const savebug = await save(bugDate);
-    res.send(savebug);
   } catch (err) {
     console.log('failed to save bug', err);
     res.status(500).send({ err: 'failed to save bug' });

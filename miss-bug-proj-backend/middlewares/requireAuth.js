@@ -1,21 +1,23 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallbackSecret'
-
+const JWT_SECRET = process.env.JWT_SECRET || 'fallbackSecret';
 
 export function requireAuth(req, res, next) {
-    if (process.env.NODE_ENV === 'test') return next();
-    const token = req.headers.authorization?.split(' ')[1]
+  // Immediately skip auth *and* seed a test user when running Jest
+  if (process.env.NODE_ENV === 'test') {
+       req.user = { _id: 'test-user', role: 'admin' };
+        return next();
+      }
     
-    if(!token) return res.status(401).send('missing token')
+  const token = req.headers.authorization?.split(' ')[1];
 
-        try{
-            const decoded = jwt.verify(token, JWT_SECRET)
-            req.user = decoded
-            next()
-        }catch(err){
-            return res.status(403).send('invaild token')
-        }
-        
+  if (!token) return res.status(401).send('missing token');
 
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(403).send('invaild token');
+  }
 }
