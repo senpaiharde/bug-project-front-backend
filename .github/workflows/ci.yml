@@ -27,7 +27,7 @@ jobs:
           context: ./miss-bug-proj-backend
           file:    ./miss-bug-proj-backend/Dockerfile
           push:    true
-          tags:    ${{ secrets.DOCKER_HUB_USERNAME }}/missbug-backend:latest
+          tags:    wokeaf97/missbug-backend:latest
 
       - name: Build & push frontend
         uses: docker/build-push-action@v3
@@ -35,4 +35,4 @@ jobs:
           context: ./miss-bug-starter-react-vite
           file:    ./miss-bug-starter-react-vite/Dockerfile
           push:    true
-          tags:    ${{ secrets.DOCKER_HUB_USERNAME }}/missbug-frontend:latest
+          tags:    wokeaf97/missbug-frontend:latest
