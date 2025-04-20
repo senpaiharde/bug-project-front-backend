@@ -31,8 +31,10 @@ app.get('/', (req, res) => {
   res.send('hello there');
 });
 app.use('/api/auth', autoRoutes);
-app.listen(3030, () => {
-  console.log('server ready at port 3030');
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log('server ready at port', PORT);
+  });
+}
 
 export default app;
