@@ -37,3 +37,5 @@ app.listen(3030,() => {
 });
 
 app.use('/api/auth',autoRoutes)
+
+export default app;

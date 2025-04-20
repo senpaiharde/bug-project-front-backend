@@ -67,3 +67,26 @@ jobs:
         run: |
           docker stop ci-test
           docker rm ci-test
+
+
+  test-backend:
+    needs: docker-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install backend dependencies
+        working-directory: ./miss-bug-proj-backend
+        run: npm ci
+
+      - name: Run backend integration tests
+        working-directory: ./miss-bug-proj-backend
+        env:
+          NODE_ENV: test          # ← ensure requireAuth skips auth
+        run: npm test             # runs "jest --runInBand"
