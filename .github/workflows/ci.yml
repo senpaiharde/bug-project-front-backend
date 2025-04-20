@@ -55,14 +55,19 @@ jobs:
 
       - name: Build backend image for test
         run: |
-          docker build ./miss-bug-proj-backend -t backend:ci
+         docker build --target runtime ./miss-bug-proj-backend -t backend:ci
 
       - name: Run health‑check container
         run: |
-          docker run -d --name ci-test -p 3030:3030 backend:ci
-          sleep 5
-          curl --fail http://localhost:3030/health
 
+         docker run -d --name ci-test -p 3030:3030 backend:ci
+         # Wait up to 15s for the server to be ready
+         for i in {1..5}; do
+           curl --fail http://localhost:3030/health && break
+           echo "Waiting for backend... ($i)"
+           sleep 3
+         done
+         curl --fail http://localhost:3030/health
       - name: Tear down
         run: |
           docker stop ci-test
