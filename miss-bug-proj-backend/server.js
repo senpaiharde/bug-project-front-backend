@@ -4,7 +4,8 @@ import cors from 'cors';
 import bugRoutes from './api/bug.routes.js';
 import autoRoutes from './api/auto.routes.js';
 const app = express();
-
+// Use environment port or default to 3030
+const PORT = process.env.PORT || 3030;
 app.use(express.json());
 app.use(cookieParser());
 
@@ -31,9 +32,10 @@ app.get('/', (req, res) => {
   res.send('hello there');
 });
 app.use('/api/auth', autoRoutes);
+
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
-    console.log('server ready at port', PORT);
+    console.log(`server ready at port ${PORT}`);
   });
 }
 
