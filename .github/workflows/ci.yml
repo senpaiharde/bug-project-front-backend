@@ -28,7 +28,7 @@ jobs:
         with:
           context: ./miss-bug-proj-backend
           file: ./miss-bug-proj-backend/Dockerfile
-          target: runtime
+         
           push: true
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/missbug-backend:latest
