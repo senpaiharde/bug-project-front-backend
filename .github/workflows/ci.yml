@@ -28,7 +28,7 @@ jobs:
         with:
           context: ./miss-bug-proj-backend
           file: ./miss-bug-proj-backend/Dockerfile
-         
+
           push: true
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/missbug-backend:latest
@@ -55,24 +55,23 @@ jobs:
 
       - name: Build backend image for test
         run: |
-         docker build --target runtime ./miss-bug-proj-backend -t backend:ci
+          docker build ./miss-bug-proj-backend -t backend:ci
 
       - name: Run health‑check container
         run: |
 
-         docker run -d --name ci-test -p 3030:3030 backend:ci
-         # Wait up to 15s for the server to be ready
-         for i in {1..5}; do
-           curl --fail http://localhost:3030/health && break
-           echo "Waiting for backend... ($i)"
-           sleep 3
-         done
-         curl --fail http://localhost:3030/health
+          docker run -d --name ci-test -p 3030:3030 backend:ci
+          # Wait up to 15s for the server to be ready
+          for i in {1..5}; do
+            curl --fail http://localhost:3030/health && break
+            echo "Waiting for backend... ($i)"
+            sleep 3
+          done
+          curl --fail http://localhost:3030/health
       - name: Tear down
         run: |
           docker stop ci-test
           docker rm ci-test
-
 
   test-backend:
     needs: docker-test
@@ -93,5 +92,5 @@ jobs:
       - name: Run backend integration tests
         working-directory: ./miss-bug-proj-backend
         env:
-          NODE_ENV: test          # ← ensure requireAuth skips auth
-        run: npm test             # runs "jest --runInBand"
+          NODE_ENV: test # ← ensure requireAuth skips auth
+        run: npm test # runs "jest --runInBand"
