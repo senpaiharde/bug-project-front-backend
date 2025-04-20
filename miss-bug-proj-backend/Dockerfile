@@ -1,11 +1,14 @@
-# --- miss-bug-proj-backend/Dockerfile ---
-    FROM node:18-alpine
+# Use a single stage for clarity
+FROM node:18-alpine
+WORKDIR /usr/src/app
 
-    WORKDIR /usr/src/app
-    COPY package.json package-lock.json ./
-    RUN npm ci --only=production
-    
-    COPY . .
-    EXPOSE 3030
-    CMD ["node", "server.js"]
-    
+# 1) Install prod deps
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+# 2) Copy code
+COPY . .
+
+# 3) Expose & run
+EXPOSE 3030
+CMD ["node", "server.js"]

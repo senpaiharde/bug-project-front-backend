@@ -21,7 +21,11 @@ app.use(cors({
     },
     credentials: true
 }));
-
+// Health‑check endpoint
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok' });
+  });
+  
 app.use('/api/bug', bugRoutes)
 
 app.get('/',(req,res) => {
