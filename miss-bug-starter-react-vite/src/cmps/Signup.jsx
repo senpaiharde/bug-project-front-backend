@@ -26,10 +26,52 @@ export function Signup({ setUser }) {
   }
 
   return (
-    <section className="loginForm">
-      <h2 className="login">sign up</h2>
-      <form onSubmit={onSubmit}>
-        <input
+    import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { login } from '../services/auth.service';
+import { Link } from 'react-router-dom';
+
+export function Login({ setUser }) {
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
+
+  const navigate = useNavigate();
+
+  function handleChange(ev) {
+    const { name, value } = ev.target;
+    setCredentials((prev) => ({ ...prev, [name]: value }));
+  }
+
+  async function onSubmit(ev) {
+    ev.preventDefault();
+    try {
+      const user = await login(credentials);
+      setUser(user);
+      alert(`Welcome ${user.fullname}`);
+
+      navigate('/');
+    } catch (err) {
+      console.error('Login failed:', err.response?.data || err.message);
+      alert('login failed');
+    }
+  }
+
+  return (<div className='FormMain'>
+    <form className="box"  onSubmit={onSubmit}>
+      <div className="login">
+        <div className="loginBx">
+          <h2>
+            <i className="fa-solid fa-right-to-bracket"></i>
+            Login
+            <i className="fa-solid fa-heart"></i>
+          </h2>
+          <input
+            type="text"
+            placeholder="Email"
+            autoComplete="Email"
+            onChange={handleChange}
+            name="email"
+          />
+          <input
           style={{ marginLeft: '75px' }}
           name="email"
           placeholder="Email"
@@ -48,15 +90,15 @@ export function Signup({ setUser }) {
           placeholder="Full Name"
           onChange={handleChange}
         />
-        <button style={{ marginLeft: '15px' }} className="headerbutton">
-          Signup
-        </button>
-      </form>
-      <Link to="/login">
-        <button style={{ marginTop: '15px' }} className="headerbutton">
-          Login
-        </button>
-      </Link>
-    </section>
+          <div className="group">
+            
+            <a href="/login">Sign In</a>
+          </div>
+        </div>
+      </div>
+    </form>
+    </div>
+  );
+}
   );
 }

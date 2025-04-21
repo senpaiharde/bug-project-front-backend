@@ -27,8 +27,8 @@ export function Login({ setUser }) {
     }
   }
 
-  return (
-    <form className="box">
+  return (<div className='FormMain'>
+    <form className="box"  onSubmit={onSubmit}>
       <div className="login">
         <div className="loginBx">
           <h2>
@@ -50,7 +50,7 @@ export function Login({ setUser }) {
             onChange={handleChange}
             autoComplete="current-password"
           />
-          <input type="submit" value="Sign in" onSubmit={onSubmit} />
+          <input type="submit" value="Sign in"  />
           <div className="group">
             <a href="#">Forgot Password</a>
             <a href="/signup">Sign up</a>
@@ -58,5 +58,6 @@ export function Login({ setUser }) {
         </div>
       </div>
     </form>
+    </div>
   );
 }
