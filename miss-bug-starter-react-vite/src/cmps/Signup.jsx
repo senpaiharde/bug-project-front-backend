@@ -36,8 +36,20 @@ export function Signup({ setUser }) {
               <i className="fa-solid fa-heart"></i>
             </h2>
 
-            <input name="email" placeholder="Email" onChange={handleChange} />
-            <input name="password" placeholder="Password" type="password" onChange={handleChange} />
+            <input
+              type="text"
+              autoComplete="Email"
+              name="email"
+              placeholder="Email"
+              onChange={handleChange}
+            />
+            <input
+              autoComplete="current-password"
+              name="password"
+              placeholder="Password"
+              type="password"
+              onChange={handleChange}
+            />
             <input
               autoComplete="full-name"
               name="fullname"
