@@ -49,24 +49,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: Build backend image for test
         run: docker build ./miss-bug-proj-backend -t backend:ci
 
       - name: Run health‑check container
         run: |
           docker run -d --name ci-test -p 3030:3030 backend:ci
-          # Wait up to 15s for the server to be ready
+          # wait loop…
           for i in {1..5}; do
-            curl --fail http://localhost:3030/health && break
-            echo "Waiting for backend... ($i)"
+            curl --fail http://localhost:3030/health && exit 0
             sleep 3
           done
-          curl --fail http://localhost:3030/health
+          exit 1  # fail if still not up
+
+      - name: Dump container logs on failure
+        if: failure()
+        run: docker logs ci-test
 
       - name: Tear down
+        if: always()
         run: |
           docker stop ci-test
           docker rm ci-test

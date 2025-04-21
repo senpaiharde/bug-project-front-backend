@@ -1,61 +1,82 @@
-import fs from 'fs/promises'; //allways us to read and write in aysc
-import { v4 as uuid } from 'uuid'; // generating ids
+import fs from 'fs/promises';
+import { v4 as uuid } from 'uuid';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { json } from 'stream/consumers';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-let bugs = null; //caching bug
-// Allow overriding the database path in tests
+// Detect test environment\
+const isTestEnv = process.env.NODE_ENV === 'test';
+
+// In-memory store for tests
+let testBugs = [];
+
+// Allow overriding the database path (e.g. for tests)
 const DEFAULT_DB = path.join(__dirname, '..', 'data', 'bug.db.json');
 const bugDbPath = process.env.BUG_DB_PATH || DEFAULT_DB;
 
+// Caching for production
+let bugs = null;
+
 async function _loadBugs() {
-  if (process.env.NODE_ENV === 'test' || !bugs) {
-    const data = await fs.readFile(bugDbPath, 'utf-8');
-    bugs = JSON.parse(data);
+  if (isTestEnv) {
+    return testBugs;
+  }
+  if (!bugs) {
+    try {
+      const data = await fs.readFile(bugDbPath, 'utf-8');
+      bugs = JSON.parse(data);
+    } catch {
+      bugs = [];
+    }
   }
   return bugs;
 }
-// get all bugs
+
 export async function query() {
-  return await _loadBugs();
+  return _loadBugs();
 }
 
-// get bug by id
 export async function getById(bugId) {
-  const bugs = await _loadBugs();
-  return bugs.find((bug) => bug._id === bugId);
+  const all = await _loadBugs();
+  return all.find((b) => b._id === bugId);
 }
 
 export async function remove(bugId) {
-  const bugs = await _loadBugs();
-  const idx = bugs.findIndex((bug) => bug._id === bugId);
+  const all = await _loadBugs();
+  const idx = all.findIndex((b) => b._id === bugId);
   if (idx === -1) throw new Error('Bug not found');
 
-  bugs.splice(idx, 1);
-  await _saveBugs();
+  all.splice(idx, 1);
+  await _saveBugs(all);
 }
 
 export async function save(bug) {
-  const bugs = await _loadBugs();
-
+  const all = await _loadBugs();
   if (bug._id) {
-    const idx = bugs.findIndex((b) => b._id === bug._id);
+    const idx = all.findIndex((b) => b._id === bug._id);
     if (idx === -1) throw new Error('Bug not found');
-    bugs[idx] = bug;
+    all[idx] = bug;
   } else {
     bug._id = uuid();
     bug.createdAt = Date.now();
-    bugs.push(bug);
+    all.push(bug);
   }
-
-  await _saveBugs();
+  await _saveBugs(all);
   return bug;
 }
 
-async function _saveBugs() {
-  await fs.writeFile(bugDbPath, JSON.stringify(bugs, null, 2));
+async function _saveBugs(all) {
+  if (isTestEnv) {
+    // Reset in-memory store for tests
+    testBugs = [...all];
+  } else {
+    await fs.writeFile(bugDbPath, JSON.stringify(all, null, 2));
+  }
+}
+
+// Helper to reset in-memory store in tests
+export function __resetTestData() {
+  testBugs = [];
 }

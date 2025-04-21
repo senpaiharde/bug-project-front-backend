@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.mjs --runInBand"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.mjs --runInBand",
+    "dev:frontend": "cd miss‑bug‑starter‑react‑vite && npm run dev",
+    "dev:backend": "cd miss‑bug‑proj‑backend     && npm run dev",
+    "dev": "concurrently \"npm:dev:*\""
   },
   "keywords": [],
   "author": "",

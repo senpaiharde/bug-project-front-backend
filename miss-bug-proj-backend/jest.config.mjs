@@ -1,7 +1,6 @@
-// jest.config.mjs
 export default {
-    testEnvironment: 'node',
-    transform: {},
-    setupFiles: ['./jest.setup.js'],  // ← explicit path to your setup file
-  };
-  
+  testEnvironment: 'node',
+  transform: {},
+  rootDir: '.',
+  setupFiles: ['<rootDir>/jest.setup.js'],
+};

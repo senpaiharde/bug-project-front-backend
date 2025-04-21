@@ -28,32 +28,35 @@ export function Login({ setUser }) {
   }
 
   return (
-    <section className="loginForm">
-      <h2 className="login">Login</h2>
-      <form onSubmit={onSubmit}>
-        <input
-          style={{ marginLeft: '75px' }}
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
-        <input
-          style={{ marginLeft: '15px' }}
-          name="password"
-          autoComplete="current-password" 
-          placeholder="Password"
-          type="password"
-          onChange={handleChange}
-        />
-        <button style={{ marginLeft: '15px' }} className="headerbutton">
-          Login
-        </button>
-      </form>
-      <Link to="/signup">
-        <button style={{ marginTop: '15px' }} className="headerbutton">
-          Signup
-        </button>
-      </Link>
-    </section>
+    <form className="box">
+      <div className="login">
+        <div className="loginBx">
+          <h2>
+            <i className="fa-solid fa-right-to-bracket"></i>
+            Login
+            <i className="fa-solid fa-heart"></i>
+          </h2>
+          <input
+            type="text"
+            placeholder="Email"
+            autoComplete="Email"
+            onChange={handleChange}
+            name="email"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            autoComplete="current-password"
+          />
+          <input type="submit" value="Sign in" onSubmit={onSubmit} />
+          <div className="group">
+            <a href="#">Forgot Password</a>
+            <a href="/signup">Sign up</a>
+          </div>
+        </div>
+      </div>
+    </form>
   );
 }
