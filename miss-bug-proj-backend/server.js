@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import bugRoutes from './api/bug.routes.js';
 import autoRoutes from './api/auto.routes.js';
+
 const app = express();
 // Use environment port or default to 3030
 const PORT = process.env.PORT || 3030;
@@ -26,7 +27,7 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.use('/api/bug', bugRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('hello there');
@@ -39,4 +40,11 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
+app.use('/api/bug', bugRoutes);
+
+
+app.use((err, req,res,next) => {
+    console.log(err);
+    res.status.send({err: err.message || 'Server error' })
+})
 export default app;

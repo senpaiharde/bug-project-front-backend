@@ -3,11 +3,11 @@ import fs from 'fs/promises';
 import path from 'path';
 import app from '../server.js';
 
-const DB = path.join(process.cwd(), 'data', 'bug.db.json');
+process.env.BUG_DB_PATH = path.join(process.cwd(), 'data', 'bug.test.db.json');
 
 describe('API / api/bug', () => {
   beforeEach(async () => {
-    await fs.writeFile(DB, '[]', 'utf-8');
+    await fs.writeFile(process.env.BUG_DB_PATH, '[]', 'utf-8');
   });
 
   it('GET /api/bug → 200 & empty array', async () => {
@@ -20,9 +20,7 @@ describe('API / api/bug', () => {
   it('POST /api/bug → 201 & returns the new bug', async () => {
     const payload = { title: 'TEST', description: 'Details' };
 
-    const res = await request(app)
-          .post('/api/bug')
-          .send(payload);
+    const res = await request(app).post('/api/bug').send(payload);
     expect(res.status).toBe(201);
     expect(res.body).toMatchObject(payload);
     expect(res.body).toHaveProperty('_id');

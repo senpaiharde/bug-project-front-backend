@@ -1,71 +1,61 @@
 import fs from 'fs/promises'; //allways us to read and write in aysc
-import {v4 as uuid} from 'uuid'; // generating ids
+import { v4 as uuid } from 'uuid'; // generating ids
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { json } from 'stream/consumers';
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const bugDbPath = path.join(__dirname, '..', 'data', 'bug.db.json'); //path 
-
-let bugs = null; //caching bugs
-
+let bugs = null; //caching bug
+// Allow overriding the database path in tests
+const DEFAULT_DB = path.join(__dirname, '..', 'data', 'bug.db.json');
+const bugDbPath = process.env.BUG_DB_PATH || DEFAULT_DB;
 
 async function _loadBugs() {
-    if(!bugs) {
-        const data = await fs.readFile(bugDbPath, 'utf-8')
-        bugs = JSON.parse(data);
-    }
-    return bugs
+  if (process.env.NODE_ENV === 'test' || !bugs) {
+    const data = await fs.readFile(bugDbPath, 'utf-8');
+    bugs = JSON.parse(data);
+  }
+  return bugs;
 }
 // get all bugs
-export async function query() {          
-    return await _loadBugs();
-    
+export async function query() {
+  return await _loadBugs();
 }
- 
 
-// get bug by id 
+// get bug by id
 export async function getById(bugId) {
-    const bugs = await _loadBugs();
-    return bugs.find(bug => bug._id === bugId)
+  const bugs = await _loadBugs();
+  return bugs.find((bug) => bug._id === bugId);
 }
-
-
-
 
 export async function remove(bugId) {
-    const bugs = await _loadBugs();
-    const idx = bugs.findIndex(bug => bug._id === bugId);
-    if( idx === -1 ) throw new Error("Bug not found");
+  const bugs = await _loadBugs();
+  const idx = bugs.findIndex((bug) => bug._id === bugId);
+  if (idx === -1) throw new Error('Bug not found');
 
-    bugs.splice(idx, 1);
-    await _saveBugs()
-    
+  bugs.splice(idx, 1);
+  await _saveBugs();
 }
 
 export async function save(bug) {
-    const bugs = await _loadBugs()
+  const bugs = await _loadBugs();
 
-    if (bug._id) {
-        const idx = bugs.findIndex(b => b._id === bug._id)
-        if (idx === -1) throw new Error("Bug not found")
-        bugs[idx] = bug
-    } else {
-        bug._id = uuid()
-        bug.createdAt = Date.now()
-        bugs.push(bug)
-    }
+  if (bug._id) {
+    const idx = bugs.findIndex((b) => b._id === bug._id);
+    if (idx === -1) throw new Error('Bug not found');
+    bugs[idx] = bug;
+  } else {
+    bug._id = uuid();
+    bug.createdAt = Date.now();
+    bugs.push(bug);
+  }
 
-    await _saveBugs()
-    return bug
+  await _saveBugs();
+  return bug;
 }
-
 
 async function _saveBugs() {
-    await fs.writeFile(bugDbPath , JSON.stringify(bugs, null , 2))
+  await fs.writeFile(bugDbPath, JSON.stringify(bugs, null, 2));
 }
-
-
