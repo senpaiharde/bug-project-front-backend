@@ -60,10 +60,9 @@ export function BugIndex({ user }) {
   }
 
   async function onEditBug(bug) {
-    const severity = +prompt('New severity?');
-    const bugToSave = { ...bug, severity };
+    
     try {
-      const savedBug = await saveBug(bugToSave);
+      const savedBug = await saveBug(bug);
 
       setBugs((prevBugs) =>
         prevBugs.map((currBug) => (currBug._id === savedBug._id ? savedBug : currBug))
@@ -104,7 +103,13 @@ export function BugIndex({ user }) {
        onClick={() => setIsAddOpen(true)}>
           Add Bug
         </button>
-        <BugList user={user} bugs={filterBugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
+        <BugList 
+        user={user} 
+        bugs={filterBugs} 
+        onRemoveBug={onRemoveBug} 
+        onEditBug={onEditBug} />
+
+        
         <AddBugModal
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}

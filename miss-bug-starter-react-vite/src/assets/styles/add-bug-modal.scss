@@ -33,7 +33,7 @@
         width: 100%;
         padding: $spacing-xs $spacing-sm;
         border: 1px solid $color-border;
-        border-radius: $border-radius / 2;
+        border-radius: 0.25rem;
         font-size: 0.95rem;
         transform: border-color 0.2s, box-shadow 0.2s;
 
@@ -61,7 +61,7 @@
     button{
         padding: $spacing-xs $spacing-sm;
         font-size: 0.95rem;
-        border-radius: $border-radius / 2 ;
+        border-radius: 0.25rem;
         cursor: pointer;
         border: none;
         text-align: center;
@@ -93,7 +93,7 @@
         width: 100%;
         padding: $spacing-xs $spacing-sm;
         border: 1px solid $color-border;
-        border-radius: $border-radius / 2;
+        border-radius: 0.25rem;
         font-size: 0.95rem;
         transform: border-color 0.2s, box-shadow 0.2s;
         cursor: pointer;
@@ -118,7 +118,7 @@
         width: 100%;
         padding: $spacing-xs $spacing-sm;
         border: 1px solid $color-border;
-        border-radius: $border-radius / 2;
+        border-radius: 0.25rem;
         font-size: 0.95rem;
         transform: border-color 0.2s, box-shadow 0.2s;
         color: #fff;
@@ -131,4 +131,12 @@
             color: rgb(145, 233, 14);
 
         }
+    }
+
+    .ModalOverEdit{
+        @include flex-center;
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0,0,0,0.10);
+        z-index: 1000;
     }
