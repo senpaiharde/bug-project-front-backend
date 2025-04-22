@@ -37,9 +37,9 @@ export default function AddBugModal({ isOpen, onClose, onSubmit }) {
       <div className="modalConttent" ref={contentRef} onClick={hanldeContentClick}>
         <h2>Add New Bug</h2>
         <form className="ModalForm" onSubmit={handleSubmit}>
-          <input name="title" placeholder="Title" required />
-          <input name="severity" type="number" min="1" max="5" placeholder="Severity" required />
-          <textarea name="description" placeholder="Description" required />
+          <input className='modalInput' name="title" placeholder="Title" required />
+          <input  className='modalInput' name="severity" type="number" min="1" max="5" placeholder="Severity" required />
+          <textarea className='modalTextArea' name="description" placeholder="Description" required />
           <div className="modalActions">
             <button type="button" onClick={onClose}>
               Cancel

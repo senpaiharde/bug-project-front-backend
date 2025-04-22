@@ -6,11 +6,11 @@
     @include flex-center;
     position: fixed;
     inset: 0;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.75);
     z-index: 1000;
 }
 .modalConttent{
-    background-color: #fff;
+    background-color: #282526;
     border-radius: $border-radius;
     padding: $spacing-lg $spacing-md;
     width: 90%;
@@ -28,8 +28,8 @@
     flex-direction: column;
     gap: $spacing-sm;
     
-    input,
-    textarea{
+    .modalInput,
+    .modalTextArea{
         width: 100%;
         padding: $spacing-xs $spacing-sm;
         border: 1px solid $color-border;
@@ -38,6 +38,7 @@
         transform: border-color 0.2s, box-shadow 0.2s;
 
         &:focus{
+            background-color: black;
             outline: none;
             border-color: $color-primary;
             box-shadow: 0 0 0 3px rgba($color-primary, 0.2)
@@ -53,7 +54,7 @@
 
 .modalActions{
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     gap: $spacing-sm;
     margin-top: $spacing-md;
 
@@ -63,6 +64,7 @@
         border-radius: $border-radius / 2 ;
         cursor: pointer;
         border: none;
+        text-align: center;
         transition: background-color 0.2s, opacity 0.2s;
 
         &:first-child{
@@ -86,3 +88,47 @@
 
 }
 
+.modalTextArea{
+        margin-top: 25px;
+        width: 100%;
+        padding: $spacing-xs $spacing-sm;
+        border: 1px solid $color-border;
+        border-radius: $border-radius / 2;
+        font-size: 0.95rem;
+        transform: border-color 0.2s, box-shadow 0.2s;
+        cursor: pointer;
+        background-color: #282526;
+        color: #fff;
+
+        &:focus{
+            background-color: #282526;
+            outline: none;
+            border-color: $color-primary;
+            box-shadow: 0 0 0 3px rgba($color-primary, 0.2);
+            color: rgb(145, 233, 14);
+            
+
+        }
+
+    }
+
+
+    .modalInput{
+        margin-top: 25px;
+        width: 100%;
+        padding: $spacing-xs $spacing-sm;
+        border: 1px solid $color-border;
+        border-radius: $border-radius / 2;
+        font-size: 0.95rem;
+        transform: border-color 0.2s, box-shadow 0.2s;
+        color: #fff;
+
+        &:focus{
+            background-color: #282526;
+            outline: none;
+            border-color: $color-primary;
+            box-shadow: 0 0 0 3px rgba($color-primary, 0.2);
+            color: rgb(145, 233, 14);
+
+        }
+    }
