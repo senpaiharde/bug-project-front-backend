@@ -17,6 +17,7 @@ export async function getBugsById(id) {
 }
 
 export async function saveBug(bug) {
+    console.log(' [frontend] saveBug called with', bug);
   try {
     const res = bug._id ? await axios.put('/bug', bug) : await axios.post('/bug', bug);
     return res.data;

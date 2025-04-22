@@ -5,16 +5,17 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+console.log(' NODE_ENV =', process.env.NODE_ENV);
 // Detect test environment\
 const isTestEnv = process.env.NODE_ENV === 'test';
-
+console.log(' isTestEnv =', isTestEnv);
 // In-memory store for tests
 let testBugs = [];
 
 // Allow overriding the database path (e.g. for tests)
 const DEFAULT_DB = path.join(__dirname, '..', 'data', 'bug.db.json');
 const bugDbPath = process.env.BUG_DB_PATH || DEFAULT_DB;
+console.log(' [bug.service] using DB path:', bugDbPath);
 
 // Caching for production
 let bugs = null;
@@ -29,6 +30,8 @@ async function _loadBugs() {
       bugs = JSON.parse(data);
     } catch {
       bugs = [];
+      await fs.writeFile(bugDbPath, '[]', 'utf8');
+      console.log('🔧 Initialized new bug.db.json');
     }
   }
   return bugs;
@@ -68,12 +71,15 @@ export async function save(bug) {
 }
 
 async function _saveBugs(all) {
+  console.log(' [bug.service] saving', all.length, 'bugs to', bugDbPath);
+  console.log('    payload:', JSON.stringify(all, null, 2));
   if (isTestEnv) {
     // Reset in-memory store for tests
     testBugs = [...all];
   } else {
     await fs.writeFile(bugDbPath, JSON.stringify(all, null, 2));
   }
+  
 }
 
 // Helper to reset in-memory store in tests

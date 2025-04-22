@@ -11,6 +11,8 @@ services:
       - '3030:3030'
     environment:
       - JWT_SECRET=missBugSecretKey
+    volumes:
+      - ./miss-bug-proj-backend/data:/usr/src/app/data
 
   frontend:
     image: miss-bug-frontend:slim
