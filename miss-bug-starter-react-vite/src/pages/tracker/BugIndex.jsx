@@ -88,7 +88,9 @@ export function BugIndex({ user }) {
             onChange={(ev) => setFilterBy({ ...filterBy, txt: ev.target.value })}
           />
           <input
-            style={{ width: '15%' }}
+            style={{ width: '15%' 
+                ,marginBottom:'15px'
+            }}
             className="buginput"
             type="number"
             placeholder="min siverity"
