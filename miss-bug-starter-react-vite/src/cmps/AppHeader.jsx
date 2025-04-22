@@ -20,7 +20,7 @@ export function AppHeader({ user, setUser }) {
         <div className="UserHeader">
           {user ? (
             <>
-              <h2>Welcome {user.fullname || user.email}</h2>
+              <h1 className='UserHeaderH2'>Welcome {user.fullname || user.email}</h1>
               <button className="headerbutton" onClick={onLogout}>
                 Logout
               </button>

@@ -94,13 +94,15 @@ export function BugIndex({user}) {
             
             <main className='bugsection'>
             <section >
-                <input className='buginput'
+                <input className='buginput' 
+                style={{width:'15%'}}
                 type='text'
                 placeholder='Search By title'
                 value={filterBy.txt}
                 onChange={(ev) => setFilterBy({...filterBy, txt: ev.target.value})}
                 />
                 <input
+                style={{width:'15%'}}
                 className='buginput'
                 type='number'
                 placeholder='min siverity'
