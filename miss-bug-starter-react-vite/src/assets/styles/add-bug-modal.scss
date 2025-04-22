@@ -1,0 +1,88 @@
+@import './variables.scss';
+@import './mixins';
+
+
+.ModalOverlay{
+    @include flex-center;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+.modalConttent{
+    background-color: #fff;
+    border-radius: $border-radius;
+    padding: $spacing-lg $spacing-md;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    h2{
+        margin: 0, 0 $spacing-sm;
+        font-size: 1.5rem;
+        color:$color-primary;
+    }
+}
+
+.modal-from{
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    
+    input,
+    textarea{
+        width: 100%;
+        padding: $spacing-xs $spacing-sm;
+        border: 1px solid $color-border;
+        border-radius: $border-radius / 2;
+        font-size: 0.95rem;
+        transform: border-color 0.2s, box-shadow 0.2s;
+
+        &:focus{
+            outline: none;
+            border-color: $color-primary;
+            box-shadow: 0 0 0 3px rgba($color-primary, 0.2)
+
+        }
+
+    }
+    textarea{
+        resize: vertical;
+            min-height: 100px;
+    }
+}
+
+.modalActions{
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-sm;
+    margin-top: $spacing-md;
+
+    button{
+        padding: $spacing-xs $spacing-sm;
+        font-size: 0.95rem;
+        border-radius: $border-radius / 2 ;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.2s, opacity 0.2s;
+
+        &:first-child{
+            background-color: $color-border;
+            color:$color-slate-600;
+
+            &:hover{
+                background: darken($color-border, 5%);
+            }
+        }
+
+        &:last-child{
+            background-color: $color-primary;
+            color:#fff;
+
+            &:hover{
+                background: $color-primary-dark;
+            }
+        }
+    }
+
+}
+

@@ -2,12 +2,12 @@ import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
 
 
-export default async function AddBugModal({isOpen,onClose,onSubmit}) {
+export default  function AddBugModal({isOpen,onClose,onSubmit}) {
     const contentRef = useRef()
 
     useEffect(() => {
         function handleKey(e) {
-            if(e.key === 'esc') onClose();
+            if(e.key === 'Escape') onClose();
         }
         if(isOpen) document.addEventListener('keydown',handleKey)
             return()=> document.addEventListener('keydown',handleKey) 
@@ -28,7 +28,7 @@ export default async function AddBugModal({isOpen,onClose,onSubmit}) {
     function handleSubmit(e) {
         e.preventDefault();
         const fm = new FormData(e.target);
-        onsubmit({
+        onSubmit({
             title:fm.get('Bug title?') || 'Untitled Bug',
             severity:+fm.get('Bug severity?') || 1,
             description: fm.get('Bug description?') || 'No description',
@@ -37,7 +37,7 @@ export default async function AddBugModal({isOpen,onClose,onSubmit}) {
     }
 
     return(
-        <div className="ModalOverlay" onClick={hanldeContentClick}>
+        <div className="ModalOverlay" onClick={handleOverlayClick}>
             <div className="modalConttent" 
             ref={contentRef} 
             onClick={hanldeContentClick}>
@@ -53,7 +53,7 @@ export default async function AddBugModal({isOpen,onClose,onSubmit}) {
                     required
                     /> 
                     <textarea name="description" placeholder="Description" required/>
-                    <div className="modal-actions">
+                    <div className="modalActions">
                         <button type="button" onClick={onClose}>
                             Cancel
                         </button>

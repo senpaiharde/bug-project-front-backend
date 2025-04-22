@@ -3,12 +3,14 @@ import { showSuccessMsg, showErrorMsg } from '../../services/event-bus.service.j
 import { BugList } from '../../cmps/BugList.jsx';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { Navigate } from 'react-router';
+
+import AddBugModal from '../../cmps/AddBugModal.jsx';
 
 export function BugIndex({ user }) {
   console.log('Current user:', user);
   const [bugs, setBugs] = useState([]);
   const [filterBy, setFilterBy] = useState({ txt: '', severity: '' });
+  const [isAddOpen, setIsAddOpen] = useState(false);
   function onDownloadPDF() {
     window.open('http://localhost:3030/api/bug/export/pdf', '_blank');
   }
@@ -45,18 +47,13 @@ export function BugIndex({ user }) {
     }
   }
 
-  async function onAddBug() {
-    const bug = {
-      title: prompt('Bug title?') || 'Untitled Bug',
-      severity: +prompt('Bug severity?') || 1,
-      description: prompt('Bug description?') || 'No description',
-    };
-    console.log(' Sending bug:', bug);
+  async function onAddBug(bug) {
     try {
       const savedBug = await saveBug(bug);
 
       setBugs((prevBugs) => [...prevBugs, savedBug]);
       showSuccessMsg('Bug added');
+      setIsAddOpen(false);
     } catch (err) {
       showErrorMsg('Cannot add bug');
     }
@@ -103,10 +100,16 @@ export function BugIndex({ user }) {
         <button className="bugbutton" onClick={onDownloadPDF}>
           Download PDF Report
         </button>
-        <button className="bugbutton" onClick={() => onAddBug()}>
-          Add Bug{' '}
+        <button className="bugbutton" 
+       onClick={() => setIsAddOpen(true)}>
+          Add Bug
         </button>
         <BugList user={user} bugs={filterBugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
+        <AddBugModal
+        isOpen={isAddOpen}
+        onClose={() => setIsAddOpen(false)}
+        onSubmit={onAddBug}
+        />
       </main>
     </section>
   );
