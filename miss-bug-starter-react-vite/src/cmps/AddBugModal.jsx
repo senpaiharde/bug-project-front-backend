@@ -67,3 +67,9 @@ export default async function AddBugModal({isOpen,onClose,onSubmit}) {
 
 
 }
+
+AddBugModal.PropTypes = {
+    isOpen : PropTypes.bool.isRequired,
+    onClose:  PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+}

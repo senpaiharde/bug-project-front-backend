@@ -1,5 +1,7 @@
 @use './DashBoard.scss';
 @use './Login.scss';
+@use './variables.scss';
+@use './mixins';
 * {
   box-sizing: border-box;
 }
