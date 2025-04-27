@@ -9,6 +9,7 @@ export async function getBugs() {
     console.error(' Failed to fetch bugs:', err.message);
     return [];
   }
+  
 }
 
 export async function getBugsById(id) {
