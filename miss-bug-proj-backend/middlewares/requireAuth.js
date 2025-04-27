@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallbackSecret';
+const JWT_SECRET = process.env.JWT_SECRET || 'missBugSecretKey';
 
 export function requireAuth(req, res, next) {
   // Immediately skip auth *and* seed a test user when running Jest

@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 
 const userDbPath = path.join(__dirname, '../data/user.db.json');
 
-const JWT_SECRET = 'missBugSecretKey';
+const JWT_SECRET = process.env.JWT_SECRET || 'missBugSecretKey';
 const ADMIN_EMAIL = 'xxslavan11@gmail.com';
 
 export async function signup(req, res) {

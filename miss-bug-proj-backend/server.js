@@ -4,6 +4,10 @@ import cors from 'cors';
 import bugRoutes from './api/bug.routes.js';
 import autoRoutes from './api/auto.routes.js';
 import { logger } from './middlewares/logger.js';
+import dotenv from 'dotenv'
+dotenv.config()
+// …
+console.log('Using JWT_SECRET:', process.env.JWT_SECRET);
 
 const app = express();
 // Use environment port or default to 3030
@@ -21,18 +25,15 @@ app.use(
       cb(new Error(`Origin ${origin} not allowed by CORS`));
     },
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
-
-
-app.use(logger)
+app.use(logger);
 // Health‑check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
-
-
 
 app.get('/', (req, res) => {
   res.send('hello there');
@@ -41,15 +42,14 @@ app.use('/api/auth', autoRoutes);
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
-    console.log(`server ready at port ${PORT}`);
+    console.log(`server ready at port ${PORT}yes`);
   });
 }
 
 app.use('/api/bug', bugRoutes);
 
-
-app.use((err, req,res,next) => {
-    console.log(err);
-    res.status.send({err: err.message || 'Server error' })
-})
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status.send({ err: err.message || 'Server error' });
+});
 export default app;
