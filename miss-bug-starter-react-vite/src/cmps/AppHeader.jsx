@@ -21,6 +21,9 @@ export function AppHeader({ user, setUser }) {
           {user ? (
             <>
               <h1 className='UserHeaderH2'>Welcome {user.fullname || user.email}</h1>
+              <Link to={`/user/${user._id}`} className="profile-link">
+    Profile
+  </Link>
               <button className="headerbutton" onClick={onLogout}>
                 Logout
               </button>

@@ -32,4 +32,10 @@ function _storeToken(token) {
 
 export function logout() {
     _storeToken(null)
+    sessionStorage.removeItem('accessToken')
+}
+
+export function getLoggedinUser() {
+    const str = sessionStorage.getItem('accessToken');
+    return str ? JSON.parse(str)  : null
 }

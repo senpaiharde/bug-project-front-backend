@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { BugPreview } from './BugPreview';
 import { useState } from 'react';
 import EditBugModal from '../cmps/EditBugModal';
-export function BugList({ bugs = [],user ={}, onRemoveBug, onEditBug }) {
+export  function BugList({ bugs = [],user ={}, onRemoveBug, onEditBug }) {
     
     const [editingBug, setEditingBug] = useState(null);
     function onStartEditing(bug) {

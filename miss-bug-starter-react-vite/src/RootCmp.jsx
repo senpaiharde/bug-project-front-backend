@@ -12,6 +12,7 @@ import axios from 'axios';
 import { logout } from './services/auth.service.js';
 import { BugDetails } from './pages/tracker/BugDetails.jsx';
 import { DashboardLayout } from './cmps/DashboardLayout.jsx';
+import Userdetails from './pages/UserDetails.jsx';
 
 export function App() {
   const [user, setUser] = useState(null);
@@ -58,7 +59,7 @@ export function App() {
         <Routes>
           <Route path="/login" element={<Login setUser={setUser} />} />
           <Route path="/signup" element={<Signup setUser={setUser} />} />
-
+          <Route path="/user/:userId" element={<Userdetails user={user} setUser={setUser} />} />
           <Route path="/" element={<DashboardLayout user={user} setUser={setUser}/>}></Route>
           <Route index element={<Home user={user} setUser={setUser} />} />
 
