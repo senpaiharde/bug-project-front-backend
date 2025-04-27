@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import bugRoutes from './api/bug.routes.js';
 import autoRoutes from './api/auto.routes.js';
+import { logger } from './middlewares/logger.js';
 
 const app = express();
 // Use environment port or default to 3030
@@ -22,6 +23,10 @@ app.use(
     credentials: true,
   })
 );
+
+
+
+app.use(logger)
 // Health‑check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
