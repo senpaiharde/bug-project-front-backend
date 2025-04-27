@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import bugRoutes from './api/bug.routes.js';
 import autoRoutes from './api/auto.routes.js';
+import userRoutes from './api/user.routes.js'
 import { logger } from './middlewares/logger.js';
 import dotenv from 'dotenv'
 dotenv.config()
@@ -40,6 +41,9 @@ app.get('/', (req, res) => {
 });
 app.use('/api/auth', autoRoutes);
 
+
+
+app.use('/api/user', userRoutes);
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`server ready at port ${PORT}yes`);

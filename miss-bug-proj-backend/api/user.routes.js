@@ -12,4 +12,10 @@ import {
 
   router.use(requireAuth);
 
-  router.get('/',listUsers)
+  router.get('/',listUsers);
+  router.get('/:id',getUser);
+  router.put('/:id', updateUser);
+  router.delete('/:id',deleteUser);
+
+
+  export default router;

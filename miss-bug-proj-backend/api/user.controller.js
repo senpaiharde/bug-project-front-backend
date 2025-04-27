@@ -8,16 +8,27 @@ const __dirname = path.dirname(__filename);
 
 const userDbPath = path.join(__dirname, '../data/user.db.json');
 
-async function _loadUsers() {
+export async function _loadUsers() {
   const text = await fs.readFile(userDbPath, 'utf-8');
   return JSON.parse(text);
 }
 
-async function _saveUsers(user) {
+export async function _saveUsers(user) {
   await fs.writeFile(userDbPath, JSON.stringify(user, null, 2));
 }
 
-async function getUser(req, res) {
+
+
+
+export async function listUsers(req,res) {
+    if(req.user.role !== 'admin') return res.status(403).send('only admin can can view user')
+    const users = await _loadUsers;
+    res.json(users.map(u => ({ _id: u._id, email: u.email, fullname: u.fullname, role: u.role })))
+
+}
+
+
+export async function getUser(req, res) {
   if (req.user.role !== 'admin') return res.status(403).send('Only admin can view a user');
   const users = await _loadUsers();
   const user = users.find((u) => u._id === req.params.id);
@@ -25,7 +36,7 @@ async function getUser(req, res) {
   res.json({ _id: user._id, email: user.email, fullname: user.fullname, role: user.role });
 }
 
-export async function updateuser(req, res) {
+export async function updateUser(req, res) {
   if (req.user.role !== 'admin') return res.status(403).send('only  admin can update users');
 
   const users = await _loadUsers();
