@@ -35,17 +35,15 @@ export async function getUser(req, res) {
 export async function updateUser(req, res) {
   if (req.user.role !== 'admin') return res.status(403).send('only  admin can update users');
 
-  const users = await _loadUsers(users);
+  let users = await _loadUsers();
+  if (!Array.isArray(users)) users = [];
   const idx = users.findIndex((u) => u._id === req.params.id);
-  if (!idx) return res.status(404).send('user not found');
+  if (idx === -1) return res.status(404).send('User not found');
 
   users[idx] = { ...users[idx], ...req.body };
-  res.json({
-    _id: users[idx],
-    email: users[idx].email,
-    fullname: users[idx].fullname,
-    role: users[idx].role,
-  });
+  await _saveUsers(users);
+  const { _id, email, fullname, role } = users[idx];
+  res.json({ _id, email, fullname, role });
 }
 
 export async function deleteUser(req, res) {

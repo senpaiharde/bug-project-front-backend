@@ -12,10 +12,9 @@ export default function UserList() {
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({ fullname: '', role: '' });
 
-  useEffect(() => {
-    getBugs().then(setBugs);
-  }, []);
-
+  if (!loggedInUser || loggedInUser.role !== 'admin') {
+    return <div>Access denied</div>;
+  }
   // Only load when we're an admin
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
@@ -24,6 +23,10 @@ export default function UserList() {
       .get('/user')
       .then((res) => setUsers(res.data))
       .catch(() => showErrorMsg('Failed to load users'));
+
+    getBugs()
+      .then(setBugs)
+      .catch(() => {});
   }, []);
 
   const bugCountByUser = bugs.reduce((acc, b) => {
@@ -41,15 +44,15 @@ export default function UserList() {
   }
 
   async function onSaveEdit() {
-   try{await axios.put(`/user/${editingId}`, editForm);
-    setUsers((us) => us.map((u) => (u._id === editingId ? { ...u, ...editForm } : u)));
-    setEditForm(null);}catch{
-        showErrorMsg('failed to save user')
+    try {
+      const { data } = await axios.put(`/user/${editingId}`, editForm);
+      setUsers((us) => us.map((u) => (u._id === editingId ? data : u)));
+      setEditingId(null);
+    } catch {
+      showErrorMsg('Failed to update user');
     }
   }
-  if (!loggedInUser || loggedInUser.role !== 'admin') {
-    return <div>Access denied</div>;
-  }
+
   return (
     <section>
       <h2>User Management</h2>
@@ -100,8 +103,12 @@ export default function UserList() {
                       <button
                         disabled={hasBugs}
                         onClick={async () => {
-                          await axios.delete(`/user/${u._id}`);
-                          setUsers((us) => us.filter((x) => x._id !== u._id));
+                          try {
+                            await axios.delete(`/user/${u._id}`);
+                            setUsers((us) => us.filter((x) => x._id !== u._id));
+                          } catch {
+                            showErrorMsg('Cannot delete user');
+                          }
                         }}>
                         Delete
                       </button>
