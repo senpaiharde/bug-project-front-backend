@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { query as queryBugs } from '../services/bug.service';
+import { query as queryBugs } from '../services/bug.service.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,16 +17,12 @@ export async function _saveUsers(user) {
   await fs.writeFile(userDbPath, JSON.stringify(user, null, 2));
 }
 
-
-
-
-export async function listUsers(req,res) {
-    if(req.user.role !== 'admin') return res.status(403).send('only admin can can view user')
-    const users = await _loadUsers;
-    res.json(users.map(u => ({ _id: u._id, email: u.email, fullname: u.fullname, role: u.role })))
-
+export async function listUsers(req, res) {
+  if (req.user.role !== 'admin') return res.status(403).send('only admin can can view user');
+  const users = await _loadUsers();
+  if (!Array.isArray(users)) users = [];
+  res.json(users.map((u) => ({ _id: u._id, email: u.email, fullname: u.fullname, role: u.role })));
 }
-
 
 export async function getUser(req, res) {
   if (req.user.role !== 'admin') return res.status(403).send('Only admin can view a user');
@@ -39,8 +35,8 @@ export async function getUser(req, res) {
 export async function updateUser(req, res) {
   if (req.user.role !== 'admin') return res.status(403).send('only  admin can update users');
 
-  const users = await _loadUsers();
-  const idx = users.findIndex((u) => i._id === req.params.body);
+  const users = await _loadUsers(users);
+  const idx = users.findIndex((u) => u._id === req.params.id);
   if (!idx) return res.status(404).send('user not found');
 
   users[idx] = { ...users[idx], ...req.body };
@@ -52,20 +48,16 @@ export async function updateUser(req, res) {
   });
 }
 
+export async function deleteUser(req, res) {
+  if (req.user.role !== 'admin') return res.status(403).send('only admin can delete user');
+  const allBugs = await queryBugs();
+  if (allBugs.some((b) => b.ownerId === req.params.id))
+    return res.status(400).send('can nott delete user with existing bugs');
 
-export async function deleteUser(req,res) {
-    if(req.user.role !== 'admin')
-        return res.status(403).send('only admin can delete user')
-    const allBugs = await queryBugs()
-    if (allBugs.some(b => b.ownerId === req.params.id))
-        return res.status(400).send('can nott delete user with existing bugs');
-
-    const users = await _loadUsers;
-    const idx = users.findIndex(u => u._id === req.params.id)
-    if(idx === -1) return res.status(404).send('user not found');
-    users.slice(idx,1)
-    await _saveUsers(users)
-    res.send({msg: 'user deleted'})
-
-
+  const users = await _loadUsers;
+  const idx = users.findIndex((u) => u._id === req.params.id);
+  if (idx === -1) return res.status(404).send('user not found');
+  users.splice(idx, 1);
+  await _saveUsers(users);
+  res.send({ msg: 'user deleted' });
 }

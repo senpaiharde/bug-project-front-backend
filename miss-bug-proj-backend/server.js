@@ -3,10 +3,10 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import bugRoutes from './api/bug.routes.js';
 import autoRoutes from './api/auto.routes.js';
-import userRoutes from './api/user.routes.js'
+import userRoutes from './api/user.routes.js';
 import { logger } from './middlewares/logger.js';
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from 'dotenv';
+dotenv.config();
 // …
 console.log('Using JWT_SECRET:', process.env.JWT_SECRET);
 
@@ -41,9 +41,8 @@ app.get('/', (req, res) => {
 });
 app.use('/api/auth', autoRoutes);
 
-
-
 app.use('/api/user', userRoutes);
+
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`server ready at port ${PORT}yes`);
@@ -53,7 +52,8 @@ if (process.env.NODE_ENV !== 'test') {
 app.use('/api/bug', bugRoutes);
 
 app.use((err, req, res, next) => {
-  console.log(err);
-  res.status.send({ err: err.message || 'Server error' });
+  console.error(err);
+  res.status(500).send({ err: err.message || 'Server error' }); 
 });
+
 export default app;

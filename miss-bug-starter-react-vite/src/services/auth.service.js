@@ -12,12 +12,14 @@ if (initToken) {
 }
 
 export async function login(credentials) {
-  const res = await axios.post(`${BASE_URL}/login`, credentials);
-
-  _storeToken(res.data.token);
-  console.log(' Login Response:', res.data);
-  return res.data.user;
-}
+    const { data } = await axios.post('/auth/login', credentials)
+    _storeToken(data.token)
+    _storeUser(data.user)
+    return data.user
+  }
+  function _storeUser(user) {
+    sessionStorage.setItem('accessToken', JSON.stringify(user))
+  }
 
 export async function signup(credentials) {
   const res = await axios.post(`${BASE_URL}/signup`, credentials);

@@ -5,12 +5,15 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 import AddBugModal from '../../cmps/AddBugModal.jsx';
+import { getLoggedinUser } from '../../services/auth.service.js';
+import { Link } from 'react-router-dom';
 
 export function BugIndex({ user }) {
   console.log('Current user:', user);
   const [bugs, setBugs] = useState([]);
   const [filterBy, setFilterBy] = useState({ txt: '', severity: '' });
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const loggedInUser = user || getLoggedinUser();
   function onDownloadPDF() {
     window.open('http://localhost:3030/api/bug/export/pdf', '_blank');
   }
@@ -60,7 +63,6 @@ export function BugIndex({ user }) {
   }
 
   async function onEditBug(bug) {
-    
     try {
       const savedBug = await saveBug(bug);
 
@@ -88,9 +90,7 @@ export function BugIndex({ user }) {
             onChange={(ev) => setFilterBy({ ...filterBy, txt: ev.target.value })}
           />
           <input
-            style={{ width: '15%' 
-                ,marginBottom:'15px'
-            }}
+            style={{ width: '15%', marginBottom: '15px' }}
             className="buginput"
             type="number"
             placeholder="min siverity"
@@ -98,25 +98,16 @@ export function BugIndex({ user }) {
             onChange={(ev) => setFilterBy({ ...filterBy, severity: ev.target.value })}
           />
         </section>
+        {loggedInUser?.role === 'admin' && <Link to="/admin/users" >User Management</Link>}
         <button className="bugbutton" onClick={onDownloadPDF}>
           Download PDF Report
         </button>
-        <button className="bugbutton" 
-       onClick={() => setIsAddOpen(true)}>
+        <button className="bugbutton" onClick={() => setIsAddOpen(true)}>
           Add Bug
         </button>
-        <BugList 
-        user={user} 
-        bugs={filterBugs} 
-        onRemoveBug={onRemoveBug} 
-        onEditBug={onEditBug} />
+        <BugList user={user} bugs={filterBugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
 
-        
-        <AddBugModal
-        isOpen={isAddOpen}
-        onClose={() => setIsAddOpen(false)}
-        onSubmit={onAddBug}
-        />
+        <AddBugModal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} onSubmit={onAddBug} />
       </main>
     </section>
   );

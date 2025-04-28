@@ -13,6 +13,7 @@ import { logout } from './services/auth.service.js';
 import { BugDetails } from './pages/tracker/BugDetails.jsx';
 import { DashboardLayout } from './cmps/DashboardLayout.jsx';
 import Userdetails from './pages/UserDetails.jsx';
+import UserList from './pages/Userlist.jsx';
 
 export function App() {
   const [user, setUser] = useState(null);
@@ -65,7 +66,7 @@ export function App() {
 
           <Route path="tracker/bug" element={<BugIndex user={user} />} />
           <Route path="tracker/bug/:bugId" element={<BugDetails user={user} />} />
-
+          <Route path="/admin/users" element={<UserList />} />
           <Route path="/settings" element={<></>}></Route>
           <Route path="/about" element={<AboutUs />} />
         </Routes>
