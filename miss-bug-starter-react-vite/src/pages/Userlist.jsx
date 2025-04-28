@@ -3,17 +3,19 @@ import { getLoggedinUser } from '../services/auth.service';
 import axios from 'axios';
 import { showErrorMsg } from '../services/event-bus.service';
 import { getBugs } from '../services/bug.service';
+import {  useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 export default function UserList() {
   const loggedInUser = getLoggedinUser();
   const [users, setUsers] = useState([]);
-
+  const Navigate =useNavigate()
   const [bugs, setBugs] = useState([]);
 
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({ fullname: '', role: '' });
 
   if (!loggedInUser || loggedInUser.role !== 'admin') {
-    return <div>Access denied</div>;
+    return <div>Access denied <Link to={'/login'}></Link></div>;
   }
   // Only load when we're an admin
   // eslint-disable-next-line react-hooks/rules-of-hooks

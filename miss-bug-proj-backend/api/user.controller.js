@@ -50,9 +50,10 @@ export async function deleteUser(req, res) {
   if (req.user.role !== 'admin') return res.status(403).send('only admin can delete user');
   const allBugs = await queryBugs();
   if (allBugs.some((b) => b.ownerId === req.params.id))
-    return res.status(400).send('can nott delete user with existing bugs');
+    return res.status(400).send('can not delete user with existing bugs');
 
-  const users = await _loadUsers;
+  const users = await _loadUsers();
+  if (!Array.isArray(users)) users = [];
   const idx = users.findIndex((u) => u._id === req.params.id);
   if (idx === -1) return res.status(404).send('user not found');
   users.splice(idx, 1);
