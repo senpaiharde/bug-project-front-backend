@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { getLoggedinUser } from '../services/auth.service';
-import axios, { Axios } from 'axios';
+import axios from 'axios';
 import { showErrorMsg } from '../services/event-bus.service';
-
+import { getBugs } from '../services/bug.service';
 export default function UserList() {
   const loggedInUser = getLoggedinUser();
   const [users, setUsers] = useState([]);
-  if (!loggedInUser || loggedInUser.role !== 'admin') {
-    return <div>Access denied</div>
-  }
+
+  const [bugs, setBugs] = useState([]);
+
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({ fullname: '', role: '' });
+
+  useEffect(() => {
+    getBugs().then(setBugs);
+  }, []);
+
   // Only load when we're an admin
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
@@ -19,9 +26,30 @@ export default function UserList() {
       .catch(() => showErrorMsg('Failed to load users'));
   }, []);
 
+  const bugCountByUser = bugs.reduce((acc, b) => {
+    acc[b.ownerId] = (acc[b.ownerId] || 0) + 1;
+    return acc;
+  }, {});
 
-  
+  function onStartEdit(u) {
+    setEditingId(u._id);
+    setEditForm({ fullname: u.fullname, role: u.role });
+  }
 
+  function onChangeField({ target }) {
+    setEditForm((prev) => ({ ...prev, [target.name]: target.value }));
+  }
+
+  async function onSaveEdit() {
+   try{await axios.put(`/user/${editingId}`, editForm);
+    setUsers((us) => us.map((u) => (u._id === editingId ? { ...u, ...editForm } : u)));
+    setEditForm(null);}catch{
+        showErrorMsg('failed to save user')
+    }
+  }
+  if (!loggedInUser || loggedInUser.role !== 'admin') {
+    return <div>Access denied</div>;
+  }
   return (
     <section>
       <h2>User Management</h2>
@@ -36,29 +64,53 @@ export default function UserList() {
         </thead>
 
         <tbody>
-          {users.map((u) => (
-            <tr key={u._id}>
-              <td>{u.fullname}</td>
-              <td>{u.email}</td>
-              <td>{u.role}</td>
-              <td>
-                <button onClick={async () => {
-                    await axios.
-                }}>✏️✏️✏️</button>
-                <button
-                  onClick={async () => {
-                    try {
-                      await axios.delete(`/user/${u._id}`);
-                      setUsers(users.filter((x) => x._id !== u._id));
-                    } catch {
-                      showErrorMsg('Cannot delete user');
-                    }
-                  }}>
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
+          {users.map((u) => {
+            const isEditing = u._id === editingId;
+            const hasBugs = bugCountByUser[u._id] > 0;
+
+            return (
+              <tr key={u._id}>
+                <td>
+                  {isEditing ? (
+                    <input name="fullname" value={editForm.fullname} onChange={onChangeField} />
+                  ) : (
+                    u.fullname
+                  )}
+                </td>
+                <td>{u.email}</td>
+                <td>
+                  {isEditing ? (
+                    <select name="role" value={editForm.role} onChange={onChangeField}>
+                      <option value="user">user</option>
+                      <option value="admin">admin</option>
+                    </select>
+                  ) : (
+                    u.role
+                  )}
+                </td>
+                <td>
+                  {isEditing ? (
+                    <>
+                      <button onClick={onSaveEdit}>Save</button>
+                      <button onClick={() => setEditingId(null)}>Cancel</button>
+                    </>
+                  ) : (
+                    <>
+                      <button onClick={() => onStartEdit(u)}>Edit</button>
+                      <button
+                        disabled={hasBugs}
+                        onClick={async () => {
+                          await axios.delete(`/user/${u._id}`);
+                          setUsers((us) => us.filter((x) => x._id !== u._id));
+                        }}>
+                        Delete
+                      </button>
+                    </>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </section>
