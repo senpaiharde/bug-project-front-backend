@@ -28,7 +28,43 @@ export async function updateBugService(id) {
 }
 
 
+export async function getBugs(req,res) {
+    try{
+        const bugs = queryBugs(req.query)
+        const users = await User.find().lean()
+        const nameById  = Object.fromEntries(users.map(u => [u._id , u.fullname]))
+        const enriched = bugs.map(bug => ({
+            ...bug,
+            ownerName: nameById[bug.ownerId]|| 'Unknown'
+        }));
+        res.json(enriched)
+    }catch(err){
+        console.error('getBugs failed', err)
+        res.status(500).send({err: 'failed to get bugs'})
+    }
+}
 
+export async function getBugsById(req,res) {
+    try{
+        const {id} = req.params;
+
+        const visited = JSON.parse(req.cookies.visitedBugs || '[]');
+        if (!visited.includes(id)) visited.push(id);
+        if(visited.length > 3) return res.status(209).send('to many requests')
+        res.cookie('visitedBugs', JSON.stringify(visited), {maxAge: 7000, sameSite: 'lax'})
+
+
+        const bug = getBugByIdService(id);
+        if(!bug) return res.status(404).send({err : 'bug not found'})
+        
+        const owner = await User.findById(bug.ownerId).lean();
+        bug.ownerName === owner?.fullname  || 'Unknown';
+        res.json(bug);
+    }catch(err) {
+        console.error('getbugbyid failed', err)
+        res.status(500).send({err: 'failed to get byuh'})
+    }
+}
 
 export async function downloadBugsPDFr(req, res) {
   try {
