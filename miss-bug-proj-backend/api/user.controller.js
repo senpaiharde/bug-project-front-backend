@@ -26,7 +26,7 @@ export async function getUsers(req,res) {
 export async function getUserById(req,res) {
     try{
         const {id} = req.params;
-        if(req.params.id !== id && req.user.role !== 'admin'){
+        if(req.user._id !== id && req.user.role !== 'admin'){
             return res.status(403).send({err: 'access denied'})
         }
         const user  = await User.findById(id).select('-passwordHash').lean()
@@ -46,7 +46,7 @@ export async function saveUsers(req,res) {
         const data = { ...req.body };
         // CREATE
         if (!data._id) {
-          if (req.user.role !== 'admin') {
+            if (req.user._id !== id && req.user.role !== 'admin') {
             return res.status(403).send({ err: 'Only admin can create users' });
           }
           if (!data.password) {
@@ -72,7 +72,7 @@ export async function saveUsers(req,res) {
         const existing = await User.findById(data._id)
         if(!existing) return res.status(404).send({err: 'user not found'}) 
 
-            if(req.user.role !== 'admin' && req.user._id !== data._id) {   
+            if (req.user.role === 'admin' && data.user) {   
                   return res.status(403).send({ err: 'Access denied' });}
 
         if(data.fullname) existing.fullname = data.fullname
@@ -94,7 +94,7 @@ export async function saveUsers(req,res) {
     export async function deleteUser(req,res) {
         try{
             const {id} = req.params;
-            if(req.user !== 'admin') res.status(403).send({err: 'access denied'})
+            if(req.user.role !== 'admin') res.status(403).send({err: 'access denied'})
             const user = await User.findById(id)
             if(!user) return res.status(404).send({err: 'user not found'})
             

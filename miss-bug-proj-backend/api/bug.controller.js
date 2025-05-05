@@ -5,25 +5,21 @@ import { Bug } from '../schemes/bugs.js';
 import { User } from '../schemes/user.js';
 
 export async function queryBugs(filter = {}) {
-    return Bug.find(filter).lean()
+    return await Bug.find(filter).lean()
 }
 
 export async function getBugByIdService(id) {
-    return Bug.findById(id).lean()
+    return await Bug.findById(id).lean()
 }
 
 
-export async function getBugByIdService(bugData) {
-   const bug = new bug(bugData)
-   await bug.save()
-   return bug.toObject();
-}
+
 export async function updateBugService(id,bugData) {
     return Bug.findByIdAndUpdate(id, bugData, {new: true}).lean()
 }
 
 export async function removeBugService(id) {
-     Bug.findByIdAndDelete(id)
+     await Bug.findByIdAndDelete(id)
      return id
 }
 async function addBugService(bugData) {
@@ -34,7 +30,7 @@ async function addBugService(bugData) {
 
 export async function getBugs(req,res) {
     try{
-        const bugs = queryBugs(req.query)
+        const bugs = await queryBugs(req.query)
         const users = await User.find().lean()
         const nameById  = Object.fromEntries(users.map(u => [u._id , u.fullname]))
         const enriched = bugs.map(bug => ({
@@ -54,7 +50,7 @@ export async function getBugsById(req,res) {
 
         const visited = JSON.parse(req.cookies.visitedBugs || '[]');
         if (!visited.includes(id)) visited.push(id);
-        if(visited.length > 3) return res.status(209).send('to many requests')
+        if(visited.length > 3) return res.status(429).send('to many requests')
         res.cookie('visitedBugs', JSON.stringify(visited), {maxAge: 7000, sameSite: 'lax'})
 
 
@@ -76,7 +72,7 @@ export async function saveBug(req,res) {
    try{
     const data = {...req.body}
     if(!data._id){
-        data.ownerId === req.user._id
+        data.ownerId = req.user._id
         const created = await  addBugService(data);
         res.status(201).json(created)
     }
@@ -98,13 +94,13 @@ export async function saveBug(req,res) {
 
 
 
-async function deleteBug(req,res) {
+export async function deleteBug(req,res) {
    try{
     const {id} = req.params;
-    const bug = getBugByIdService(id);
+    const bug = await getBugByIdService(id);
 
     if(!bug) return res.status(404).send({err: 'failed to get bug'})
-    if(req.body.role !== 'admin' & bug.ownerId !== req.user_id ){
+    if(req.user.role !== 'admin' & bug.ownerId !== req.user._id ){
        return res.status(403).send({err: "not your bug"})
     }
 
@@ -119,7 +115,7 @@ async function deleteBug(req,res) {
   }
 export async function downloadBugsPDFr(req, res) {
   try {
-    const bugs = await query();
+    const bugs = await queryBugs();
 
     const doc = new PDFDocument();
     res.setHeader('Content-Disposition', 'attachment; filename="bugs-report.pdf"');

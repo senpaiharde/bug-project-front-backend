@@ -7,8 +7,8 @@ import userRoutes from './api/user.routes.js';
 import { logger } from './middlewares/logger.js';
 import dotenv from 'dotenv';
 
-import { connectDB } from './services/db.service.js';
-await connectDB()
+import './services/db.service.js'; 
+
 dotenv.config();
 // …
 console.log('Using JWT_SECRET:', process.env.JWT_SECRET);

@@ -16,7 +16,7 @@ describe('API /api/bug', () => {
 
   it('POST /api/bug → 201 & returns the new bug', async () => {
     const payload = { title: 'TEST', description: 'Details' };
-    const res     = await request(app).post('/api/bug').send(payload);
+    const res = await request(app).post('/api/bug').send(payload);
     expect(res.status).toBe(201);
     expect(res.body).toMatchObject(payload);
     expect(res.body).toHaveProperty('_id');

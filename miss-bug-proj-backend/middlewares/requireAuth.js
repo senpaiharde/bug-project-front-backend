@@ -5,16 +5,16 @@ const JWT_SECRET = process.env.JWT_SECRET || 'missBugSecretKey';
 
 export async function requireAuth(req, res, next) {
   try{
-    const authHeader = req.header.authorization || '';
-    const token = authHeader.startsWih('Bearer')
-    ? authHeader.split(' ')[1]
-    : null
-    if(!token) res.status(401).json({err: 'Authentication required'})
+    const authHeader = req.headers.authorization || '';
+    const token = authHeader.startsWith('Bearer ')
+  ? authHeader.slice(7)
+  : null;
+if (!token) return res.status(401).json({ err: 'Authentication required' });
         
   const payload = jwt.verify(token, JWT_SECRET)
   const user = await User.findById(payload._id).select('-passwordHash').lean()
   if(!user) res.status(401).json({err: 'user not found'})
-    res.user =user;
+    req.user =user;
 next()
   }catch(err){
    console.error('Invalid or expired token',err);
