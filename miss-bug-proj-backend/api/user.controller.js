@@ -1,62 +1,106 @@
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { query as queryBugs } from '../services/bug.service.js';
+import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
+import { User } from '../schemes/user.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-const userDbPath = path.join(__dirname, '../data/user.db.json');
 
-export async function _loadUsers() {
-  const text = await fs.readFile(userDbPath, 'utf-8');
-  return JSON.parse(text);
+
+const SALT_ROUNDS = 10;
+
+export async function getUsers(req,res) {
+    try{
+        if(req.user.role !== 'admin'){
+            return res.status(403).send({err: 'access denied'})
+        }
+
+        const users = await User.find().select('-passwordHash').lean();
+        res.json(users)
+    }catch(err){
+        console.error(err, 'failed to get users')
+        res.status(500).send({err: 'failed to get users'})
+
+    }
 }
 
-export async function _saveUsers(user) {
-  await fs.writeFile(userDbPath, JSON.stringify(user, null, 2));
+
+export async function getUserById(req,res) {
+    try{
+        const {id} = req.params;
+        if(req.params.id !== id && req.user.role !== 'admin'){
+            return res.status(403).send({err: 'access denied'})
+        }
+        const user  = await User.findById(id).select('-passwordHash').lean()
+        if(!user) return res.status(404).send({err: 'user not found'})
+        res.json(user)
+    }catch(err)
+    {
+        console.error(err, 'failed to get users')
+        res.status(500).send({err: 'failed to get users'})
+
+    }
+       
 }
 
-export async function listUsers(req, res) {
-  if (req.user.role !== 'admin') return res.status(403).send('only admin can can view user');
-  const users = await _loadUsers();
-  if (!Array.isArray(users)) users = [];
-  res.json(users.map((u) => ({ _id: u._id, email: u.email, fullname: u.fullname, role: u.role })));
-}
+export async function saveUsers(req,res) {
+    try {
+        const data = { ...req.body };
+        // CREATE
+        if (!data._id) {
+          if (req.user.role !== 'admin') {
+            return res.status(403).send({ err: 'Only admin can create users' });
+          }
+          if (!data.password) {
+            return res.status(400).send({ err: 'Password is required' });
+          }
+          const existing = await User.findOne({ email: data.email }).lean();
+          if (existing) {
+            return res.status(409).send({ err: 'Email already in use' });
+          }
+          const passwordHash = await bcrypt.hash(data.password, SALT_ROUNDS);
+          const newUser = new User({
+            email: data.email,
+            fullname: data.fullname,
+            passwordHash,
+            role: data.role || 'user'
+          });
+          await newUser.save();
+          const result = newUser.toObject();
+          delete result.passwordHash;
+          return res.status(201).json(result);
+        }
+        // UPDATE
+        const existing = await User.findById(data._id)
+        if(!existing) return res.status(404).send({err: 'user not found'}) 
 
-export async function getUser(req, res) {
-  if (req.user.role !== 'admin') return res.status(403).send('Only admin can view a user');
-  const users = await _loadUsers();
-  const user = users.find((u) => u._id === req.params.id);
-  if (!user) return res.status(404).send('user not found');
-  res.json({ _id: user._id, email: user.email, fullname: user.fullname, role: user.role });
-}
+            if(req.user.role !== 'admin' && req.user._id !== data._id) {   
+                  return res.status(403).send({ err: 'Access denied' });}
 
-export async function updateUser(req, res) {
-  if (req.user.role !== 'admin') return res.status(403).send('only  admin can update users');
+        if(data.fullname) existing.fullname = data.fullname
+        if(data.email) existing.email = data.email
+        if(data.password) existing.passwordHash = await bcrypt.hash(data.password, SALT_ROUNDS)
 
-  let users = await _loadUsers();
-  if (!Array.isArray(users)) users = [];
-  const idx = users.findIndex((u) => u._id === req.params.id);
-  if (idx === -1) return res.status(404).send('User not found');
+        if(req.user.role === 'admin' && data.user) existing.role = data.role
+        await existing.save()
+        const result = existing.toObject()
+        delete result.passwordHash
+        res.json(result)
+      } catch (err) {
+        console.error('saveUser failed', err);
+        res.status(500).send({ err: 'Failed to save user' });
+      }
+    }
+    
 
-  users[idx] = { ...users[idx], ...req.body };
-  await _saveUsers(users);
-  const { _id, email, fullname, role } = users[idx];
-  res.json({ _id, email, fullname, role });
-}
-
-export async function deleteUser(req, res) {
-  if (req.user.role !== 'admin') return res.status(403).send('only admin can delete user');
-  const allBugs = await queryBugs();
-  if (allBugs.some((b) => b.ownerId === req.params.id))
-    return res.status(400).send('can not delete user with existing bugs');
-
-  const users = await _loadUsers();
-  if (!Array.isArray(users)) users = [];
-  const idx = users.findIndex((u) => u._id === req.params.id);
-  if (idx === -1) return res.status(404).send('user not found');
-  users.splice(idx, 1);
-  await _saveUsers(users);
-  res.send({ msg: 'user deleted' });
-}
+    export async function deleteUser(req,res) {
+        try{
+            const {id} = req.params;
+            if(req.user !== 'admin') res.status(403).send({err: 'access denied'})
+            const user = await User.findById(id)
+            if(!user) return res.status(404).send({err: 'user not found'})
+            
+            await User.findByIdAndDelete(id)
+            res.json({msg: 'user deleted'})
+        }catch (err) {
+            console.error('deleteUser failed', err);
+            res.status(500).send({ err: 'deleteUser failed' });}
+    }
