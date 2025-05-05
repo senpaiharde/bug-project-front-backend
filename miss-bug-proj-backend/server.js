@@ -4,6 +4,7 @@ import cors from 'cors';
 import bugRoutes from './api/bug.routes.js';
 import autoRoutes from './api/auto.routes.js';
 import userRoutes from './api/user.routes.js';
+import msgRoutes from './api/msg.route.js';
 import { logger } from './middlewares/logger.js';
 import dotenv from 'dotenv';
 
@@ -45,7 +46,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', autoRoutes);
 
 app.use('/api/user', userRoutes);
-
+app.use('/api/msg', msgRoutes);
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`server ready at port ${PORT}yes`);
