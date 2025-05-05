@@ -1,15 +1,19 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
-export function connectDB() {
-    const url = process.env.MONGO_URI;
-    return mongoose.connect(url, {
-        useNewUrlParse: true,
-        useUnifiedTopology : true,
+export async function connectDB() {
+  const url = process.env.MONGO_URI;
+  console.log("🔗 Connecting to MongoDB with URI:", url);
 
-    })
-    .then(() => console.log('connected to mongo atlas'))
-    .catch(err => {
-        console.log('something went wrong on connection to mongo atlas')
-        process.exit(1);
-    })
+  try {
+    await mongoose.connect(url, {
+      useNewUrlParser:    true,
+      useUnifiedTopology: true,
+    });
+    console.log(" Connected to MongoDB Atlas");
+  } catch (err) {
+    console.error(" MongoDB connection error:", err);
+    process.exit(1);
+  }
 }
