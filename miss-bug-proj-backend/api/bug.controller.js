@@ -22,11 +22,15 @@ export async function updateBugService(id,bugData) {
     return Bug.findByIdAndUpdate(id, bugData, {new: true}).lean()
 }
 
-export async function updateBugService(id) {
+export async function removeBugService(id) {
      Bug.findByIdAndDelete(id)
      return id
 }
-
+async function addBugService(bugData) {
+    const bug = new Bug(bugData);
+    await bug.save();
+    return bug.toObject();
+  }
 
 export async function getBugs(req,res) {
     try{
@@ -66,6 +70,53 @@ export async function getBugsById(req,res) {
     }
 }
 
+
+
+export async function saveBug(req,res) {
+   try{
+    const data = {...req.body}
+    if(!data._id){
+        data.ownerId === req.user._id
+        const created = await  addBugService(data);
+        res.status(201).json(created)
+    }
+
+
+    const existing = await getBugByIdService(data._id)
+    if(!existing) return res.status(404).send({err: 'bug not found'});
+    if(req.user.role !== 'admin' && existing.ownerId !== req.user._id){
+        return res.status(403).send({err: 'you Dont have promition'})
+    }  
+    const updated = await updateBugService(data._id, data)
+    res.json(updated)
+   }catch(err){
+    console.error(err, 'failed to save bug')
+    res.status(500).send({err: 'failed to save bug'})
+}
+   
+}
+
+
+
+async function deleteBug(req,res) {
+   try{
+    const {id} = req.params;
+    const bug = getBugByIdService(id);
+
+    if(!bug) return res.status(404).send({err: 'failed to get bug'})
+    if(req.body.role !== 'admin' & bug.ownerId !== req.user_id ){
+       return res.status(403).send({err, "not your bug"})
+    }
+
+
+    await removeBugService(id)
+    res.json({msg , "bug removed"})
+   }catch(err){
+    console.error(err, 'failed to delete bug' )
+    res.status(500).send({err: 'failed to delete bug'})
+  
+   }
+  }
 export async function downloadBugsPDFr(req, res) {
   try {
     const bugs = await query();
