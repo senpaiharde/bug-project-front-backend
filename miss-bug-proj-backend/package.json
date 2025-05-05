@@ -20,6 +20,8 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "miss-bug-proj-backend": "file:",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.14.1",
     "pdfkit": "^0.17.0",
     "uuid": "^11.1.0"
   },
