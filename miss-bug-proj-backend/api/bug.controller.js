@@ -105,12 +105,12 @@ async function deleteBug(req,res) {
 
     if(!bug) return res.status(404).send({err: 'failed to get bug'})
     if(req.body.role !== 'admin' & bug.ownerId !== req.user_id ){
-       return res.status(403).send({err, "not your bug"})
+       return res.status(403).send({err: "not your bug"})
     }
 
 
     await removeBugService(id)
-    res.json({msg , "bug removed"})
+    res.json({msg : "bug removed"})
    }catch(err){
     console.error(err, 'failed to delete bug' )
     res.status(500).send({err: 'failed to delete bug'})
