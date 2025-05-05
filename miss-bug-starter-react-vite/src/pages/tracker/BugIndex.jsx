@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 import AddBugModal from '../../cmps/AddBugModal.jsx';
 import { getLoggedinUser } from '../../services/auth.service.js';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 export function BugIndex({ user }) {
   console.log('Current user:', user);
@@ -14,6 +14,8 @@ export function BugIndex({ user }) {
   const [filterBy, setFilterBy] = useState({ txt: '', severity: '' });
   const [isAddOpen, setIsAddOpen] = useState(false);
   const loggedInUser = user || getLoggedinUser();
+  const Navigate = useNavigate()
+  if(!user){  return <Navigate to="/login" replace />;}
   function onDownloadPDF() {
     window.open('http://localhost:3030/api/bug/export/pdf', '_blank');
   }

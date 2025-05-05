@@ -3,8 +3,7 @@ import { Msg } from '../schemes/msg.js';
 
 export { Msg } from '../schemes/msg.js';
 
-import { Bug } from '../schemes/bugs.js';
-import { User } from '../schemes/user.js';
+
 import { getBugsById, queryBugs } from './bug.controller.js';
 import { getUserById, getUsers } from './user.controller.js';
 
@@ -108,7 +107,7 @@ export async function saveMsg(req, res) {
   }
 }
 
-export async function deleteBug(req, res) {
+export async function deleteMsg(req, res) {
   try {
     const {id} = req.params;
     const existing = await MsgService.getById(id)

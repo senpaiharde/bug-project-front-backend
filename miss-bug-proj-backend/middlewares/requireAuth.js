@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../schemes/user';
+import { User } from '../schemes/user.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'missBugSecretKey';
 
@@ -29,4 +29,5 @@ export async function adminOnly(req,res,next) {
         return res.status(403).json({err: 'access denied'})
     }
     next()
+    return;
 }

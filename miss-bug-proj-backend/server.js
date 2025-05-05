@@ -8,10 +8,10 @@ import msgRoutes from './api/msg.route.js';
 import { logger } from './middlewares/logger.js';
 import dotenv from 'dotenv';
 
-import './services/db.service.js'; 
+import connectDB from './services/db.service.js'; 
 
 dotenv.config();
-// …
+await connectDB();
 console.log('Using JWT_SECRET:', process.env.JWT_SECRET);
 
 const app = express();

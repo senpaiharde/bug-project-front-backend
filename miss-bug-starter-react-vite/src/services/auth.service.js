@@ -45,5 +45,12 @@ export function logout() {
 
 export function getLoggedinUser() {
   const str = sessionStorage.getItem('accessToken');
-  return str ? JSON.parse(str) : null;
+  if (!str) return null;                // guard for missing value
+  try {
+    return JSON.parse(str);
+  } catch {
+    console.warn('Could not parse stored user:', str);
+    return null;
+  }
+  
 }

@@ -33,5 +33,12 @@
     "fullname": "maya",
     "password": "$2b$10$VZQEvN5PaL87pOv0PfG36.yVGIaQ7nfZAn3Nu2mKgat3KG3mUVDoe",
     "role": "user"
+  },
+  {
+    "_id": "lycF5maN",
+    "email": "maya1@gmail.com",
+    "fullname": "maya",
+    "password": "$2b$10$LnCQTVDDXQSjLnUhxFEzi.vcXNnBce7RLbdbKljrcKqSQ7G4fSosu",
+    "role": "user"
   }
 ]

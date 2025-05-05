@@ -1,6 +1,6 @@
 
 import { Schema, model } from 'mongoose';
-
+import mongoose from 'mongoose';
 const msgSchema = new Schema({
   _id:        { type: String },
   txt:        { type: String, required: true },

@@ -1,6 +1,6 @@
 
 import PDFDocument from 'pdfkit';
-import { Request, Response } from 'express';
+
 import { Bug } from '../schemes/bugs.js';
 import { User } from '../schemes/user.js';
 
