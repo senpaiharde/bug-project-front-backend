@@ -4,12 +4,15 @@ import {showErrorMsg} from '../../services/event-bus.service.js';
 import { useNavigate, useParams } from 'react-router';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getMsgs } from '../../services/msg.service.js';
+import { getMsgs, saveMsg } from '../../services/msg.service.js';
 
 export function BugDetails() {
   const [bug, setBug] = useState(null);
   const { bugId } = useParams();
   const [msg, setMsgs] = useState([]);
+  const [newMsg, setNewMsg] = useState('');
+  const [saving, setSaving] = useState(false);
+
   const Navigate = useNavigate()
   useEffect(() => {
     async function load() {
@@ -36,7 +39,20 @@ export function BugDetails() {
         load();
       }, [bug, bugId])
 
-
+  async function addMsg (ev) {
+     ev.preventDefault()
+     if(!newMsg.trim())return;
+     setSaving(true)
+     try{
+        const saved = await saveMsg({txt: newMsg, aboutBugId: bugId})
+        setMsgs(curr => [...curr, saved])
+        setNewMsg('')
+     }catch(err){
+        showErrorMsg('Failed to load messages');
+     }finally {
+        setSaving(false);
+      }
+  }
 
   if (!bug) return <h1>loadings....</h1>;
   if (!bug)       return <Navigate to="/tracker/bug" replace />;
@@ -55,13 +71,26 @@ export function BugDetails() {
       </Link>
       <section>
         <h4>Messages</h4>
-        {msg.length === 0 ? <p>no messages yet</p>
+        {msg.length === 0 ? (<><p>no messages yet</p>
+        <p>Add description </p>
+    </>)
         : msg.map((m, idx) => (
             <div key={m._id || idx} className="message-card">
                 <p>{m.txt}</p>
-                <small>by<strong>{m.byUser.fullname}</strong></small>
+                <small>by<strong>{m.byUser}</strong></small>
             </div>
         ))}
+        <form onSubmit={addMsg}>
+            <textarea 
+            value={newMsg}
+            onChange={(e) => setNewMsg(e.target.value)}
+            rows={3}
+            required/>
+            <button type='submit' disabled={saving}>
+                {saving ? "saving...": 'Add Message'}
+            </button>
+        </form>
+
       </section>
     </div>
   );

@@ -2,7 +2,7 @@ import express, { Router } from  'express';
 import {
     getUsers,
     getUserById,
-    saveUsers,
+    saveUser,
     deleteUser
   } from './user.controller.js';
 
@@ -14,8 +14,8 @@ import {
 
   router.get('/',    requireAuth, adminOnly, getUsers);
   router.get('/:id', requireAuth, getUserById);
-  router.post('/',   requireAuth, saveUsers);
-  router.put('/:id', requireAuth, saveUsers);
+  router.post('/',   requireAuth, saveUser);
+  router.put('/:id', requireAuth, saveUser);
   router.delete('/:id', requireAuth, adminOnly, deleteUser);
   
 
