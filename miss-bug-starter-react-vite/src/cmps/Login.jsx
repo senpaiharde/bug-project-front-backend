@@ -4,26 +4,28 @@ import { login } from '../services/auth.service';
 import { Link } from 'react-router-dom';
 
 export function Login({ setUser }) {
-  const [credentials, setCredentials] = useState({ email: '', password: '' });
-
+  
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  function handleChange(ev) {
-    const { name, value } = ev.target;
-    setCredentials((prev) => ({ ...prev, [name]: value }));
-  }
+  
 
   async function onSubmit(ev) {
     ev.preventDefault();
     try {
-      const user = await login(credentials);
+      const {token,user} = await login({ email, password });
+      console.log('Logged in:', { token, user });
+      if (!token || !user) throw new Error('Invalid login data');
       setUser(user);
       alert(`Welcome ${user.fullname}`);
-
+      navigate('/tracker/bug');
       navigate('/');
     } catch (err) {
       console.error('Login failed:', err.response?.data || err.message);
       alert('login failed');
+      setError(err.response?.data?.err || err.message);
     }
   }
 
@@ -40,14 +42,16 @@ export function Login({ setUser }) {
             type="text"
             placeholder="Email"
             autoComplete="Email"
-            onChange={handleChange}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             name="email"
           />
           <input
             type="password"
             name="password"
             placeholder="Password"
-            onChange={handleChange}
+             value={password}
+            onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
           />
           <input type="submit" value="Sign in"  />

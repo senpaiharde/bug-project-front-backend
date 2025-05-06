@@ -18,7 +18,15 @@ export async function signup(req, res) {
 
     await user.save();
     const token = jwt.sign({ _id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '2h' });
-    res.status(201).json({ token, _id: user._id, fullname, role: user.role });
+    res.status(201).json({
+        token,
+        user: {
+          _id:     user._id,
+          email:   user.email,
+          fullname:user.fullname,
+          role:    user.role
+        }
+      });
   } catch (err) {
     console.error(err, 'failed to signup');
     res.status(500).json({ err: 'failed to signup' });
@@ -38,7 +46,15 @@ export async function login(req, res) {
     if (!match) return res.status(401).send('wrong password');
 
     const token = jwt.sign({ _id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '2h' });
-    res.status(201).json({ token, _id: user._id,  role: user.role  });
+    res.status(201).json({
+        token,
+        user: {
+          _id:     user._id,
+          email:   user.email,
+          fullname:user.fullname,
+          role:    user.role
+        }
+      });
   } catch (err) {
     console.error(err, 'failed to login');
     res.status(500).json({ err: 'failed to login' });

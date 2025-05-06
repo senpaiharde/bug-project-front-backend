@@ -5,13 +5,12 @@ import { Link } from 'react-router-dom';
 
 export function Signup({ setUser }) {
   const [credentials, setCredentials] = useState({ email: '', password: '', fullname: '' });
-
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullname, setFullname] = useState('');
   const navigate = useNavigate();
 
-  function handleChange(ev) {
-    const { name, value } = ev.target;
-    setCredentials((prev) => ({ ...prev, [name]: value }));
-  }
+  
 
   async function onSubmit(ev) {
     ev.preventDefault();
@@ -41,20 +40,23 @@ export function Signup({ setUser }) {
               autoComplete="Email"
               name="email"
               placeholder="Email"
-              onChange={handleChange}
+              value={email}
+            onChange={(e) => setEmail(e.target.value)}
             />
             <input
               autoComplete="current-password"
               name="password"
               placeholder="Password"
               type="password"
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <input
               autoComplete="full-name"
               name="fullname"
               placeholder="Full Name"
-              onChange={handleChange}
+              value={fullname}
+              onChange={(e) => setFullname(e.target.value)}
             />
             <input type="submit" value="Sign in" />
             <div className="group">

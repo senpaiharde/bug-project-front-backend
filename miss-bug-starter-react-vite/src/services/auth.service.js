@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const token = localStorage.getItem('accessToken');
-const BASE_URL = 'http://localhost:3030/api/auth';
+
 axios.defaults.baseURL = 'http://localhost:3030/api';
 axios.defaults.withCredentials = true;
 console.log('Auth header:', axios.defaults.headers.common['Authorization']);
@@ -11,41 +10,49 @@ if (initToken) {
   axios.defaults.headers.common['Authorization'] = `Bearer ${initToken}`
 }
 
-export async function login(credentials) {
-    const { data } = await axios.post('/auth/login', credentials)
-    _storeToken(data.token)
-    _storeUser(data.user)
-    return data.user
+export async function login({ email, password }) {
+    const resp = await axios.post('/auth/login', { email, password });
+    console.log(' [auth.service] login raw response:', resp);
+    const { data } = resp;
+    console.log(' [auth.service] login payload:', data);
+    const { token, user } = data;
+    if (!token || !user) {
+      throw new Error(`Bad login response: ${JSON.stringify(data)}`);
+    }
+    _storeToken(token);
+    _storeUser(user);
+    return { token, user };
   }
   function _storeUser(user) {
-    sessionStorage.setItem('accessToken', JSON.stringify(user))
+    localStorage.setItem('loggedinUser', JSON.stringify(user));
   }
 
-export async function signup(credentials) {
-  const res = await axios.post(`${BASE_URL}/signup`, credentials);
-  _storeToken(res.data.token);
-  return res.data.user;
+export async function signup({email,password,fullname}) {
+  const data = await axios.post(`/auth/signup`, {email,password,fullname});
+  const { token, user } = data;   
+  if (!token || !user) throw new Error('Bad signup response');
+  _storeToken(token);
+  _storeUser(user);
+  return { token, user };
 }
 
 function _storeToken(token) {
-  localStorage.setItem('accessToken', token);
-  if (token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete axios.defaults.headers.common['Authorization'];
-  }
-  axios.defaults.baseURL = 'http://localhost:3030/api';
-  axios.defaults.withCredentials = true;
+  
+   localStorage.setItem('accessToken', token);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  
 }
 
 export function logout() {
-  _storeToken(null);
-  sessionStorage.removeItem('accessToken');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('loggedinUser');
+    _storeToken(null)
+    delete axios.defaults.headers.common['Authorization'];
 }
 
 export function getLoggedinUser() {
-  const str = sessionStorage.getItem('accessToken');
-  if (!str) return null;                // guard for missing value
+  const str = sessionStorage.getItem('loggedinUser');
+  if (!str) return null;              
   try {
     return JSON.parse(str);
   } catch {

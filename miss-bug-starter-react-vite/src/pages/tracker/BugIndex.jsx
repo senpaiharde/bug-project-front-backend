@@ -15,10 +15,7 @@ export function BugIndex({ user }) {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const loggedInUser = user || getLoggedinUser();
   const Navigate = useNavigate()
-  if(!user){  return <Navigate to="/login" replace />;}
-  function onDownloadPDF() {
-    window.open('http://localhost:3030/api/bug/export/pdf', '_blank');
-  }
+  
 
   const filterBugs = bugs.filter((bug) => {
     const title = bug.title || '';
@@ -30,7 +27,10 @@ export function BugIndex({ user }) {
   useEffect(() => {
     loadBugs();
   }, []);
-
+  if(!user){  return <Navigate to="/login" replace />;}
+  function onDownloadPDF() {
+    window.open('http://localhost:3030/api/bug/export/pdf', '_blank');
+  }
   async function loadBugs() {
     try {
       const bugs = await getBugs();
