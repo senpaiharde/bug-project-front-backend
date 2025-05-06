@@ -22,7 +22,7 @@ export async function removeBugService(id) {
      await Bug.findByIdAndDelete(id)
      return id
 }
-async function addBugService(bugData) {
+export async function addBugService(bugData) {
     const bug = new Bug(bugData);
     await bug.save();
     return bug.toObject();

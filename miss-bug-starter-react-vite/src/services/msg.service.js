@@ -3,9 +3,9 @@ import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:3030/api'; 
 axios.defaults.withCredentials = true;
 
-export async function getMsgs() {
+export async function getMsgs(filter) {
   try {
-    const {data} = await axios.get('/msg');
+    const {data} = await axios.get('/msg',{ params: filter });
     console.log('Fetched msgs:', data);
     return data;
   } catch (err) {
